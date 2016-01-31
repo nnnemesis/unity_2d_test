@@ -1,0 +1,7 @@
+/Temp
+/Library
+
+/obj
+/*.csproj
+/*.sln
+/.vs/scary_journey_2d-csharp/v14/*.suo
