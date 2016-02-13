@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AxeWeaponController : MonoBehaviour, IWeapon, ITireEventListener
+public class HitWeaponController : MonoBehaviour, IWeapon, ITireEventListener
 {
     public WeaponState State;
     private IEventTire EventTire;
@@ -16,7 +16,6 @@ public class AxeWeaponController : MonoBehaviour, IWeapon, ITireEventListener
     {
         if (State.UseStateDone && State.UseState == WeaponUseState.Idle)
         {
-            Debug.Log("Use axe!");
             State.UseState = WeaponUseState.Use;
             State.UseStateDone = false;
             Invoke("UsingDone", State.OneUseTime);
@@ -42,7 +41,7 @@ public class AxeWeaponController : MonoBehaviour, IWeapon, ITireEventListener
 
     public IEventTire GetTire()
     {
-        return GetComponent<IEventTire>();
+        return EventTire;
     }
 
     public void OnTireEvent(TireEvent ev) { }
