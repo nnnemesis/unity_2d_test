@@ -5,7 +5,6 @@ public class BaseController : MonoBehaviour, ITireEventListener {
 
     private BaseState BaseState;
     private IEventTire EventTire;
-    public Transform LeftHandTransform;
 
     void Awake()
     {
