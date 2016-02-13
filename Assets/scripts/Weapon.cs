@@ -15,9 +15,8 @@ public enum WeaponUseState
     Reload
 }
 
-public interface IWeapon
+public interface IWeapon : IHasEventTire
 {
-    IEventTire GetTire();
     void StartUsing();
     void StopUsing();
     void Recharge();

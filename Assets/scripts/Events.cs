@@ -5,12 +5,12 @@ using System.Collections.Generic;
 public enum TireEventType
 {
     ControlEvent,
-    PlayerChangedDirectionEvent,
-    PlayerChangedMoveStateEvent,
-    PlayerChangedJumpStateEvent,
+    ChangedDirectionEvent,
+    ChangedMoveStateEvent,
+    ChangedJumpStateEvent,
     WeaponUseStateChangedEvent,
     WeaponUseStateDoneEvent,
-    PlayerChangedCurrentWeapon,
+    ChangedCurrentWeapon,
 }
 
 public abstract class TireEvent
@@ -21,6 +21,11 @@ public abstract class TireEvent
 public interface ITireEventListener
 {
     void OnTireEvent(TireEvent ev);
+}
+
+public interface IHasEventTire
+{
+    IEventTire GetTire();
 }
 
 public interface IEventTire
