@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class BaseAnimationController : MonoBehaviour, ITireEventListener {
+public class BaseMoveAnimationController : MonoBehaviour, ITireEventListener {
 
     private Animator Animator;
     private IEventTire EventTire;

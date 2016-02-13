@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class BaseController : MonoBehaviour, ITireEventListener {
+public class BaseMoveController : MonoBehaviour, ITireEventListener {
 
-    private BaseState BaseState;
+    private BaseMoveState BaseState;
     private IEventTire EventTire;
 
     void Awake()
     {
         EventTire = GetComponent<IEventTire>();
-        BaseState = GetComponent<BaseState>();
+        BaseState = GetComponent<BaseMoveState>();
         EventTire.AddEventListener(TireEventType.ControlEvent, this);
         EventTire.AddEventListener(TireEventType.ChangedMoveStateEvent, this);
         EventTire.AddEventListener(TireEventType.ChangedJumpStateEvent, this);
@@ -45,7 +45,6 @@ public class BaseController : MonoBehaviour, ITireEventListener {
 
     public void OnTireEvent(TireEvent ev)
     {
-        //Debug.Log("PLAYER controller on tire event "+ev.Type);
         if(ev.Type == TireEventType.ControlEvent)
         {
             OnControlEvent((ControlEvent)ev);

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BaseState : MonoBehaviour
+public class BaseMoveState : MonoBehaviour
 {
     private IEventTire EventTire;
     public Rigidbody2D Rigidbody;

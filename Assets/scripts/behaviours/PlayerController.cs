@@ -36,12 +36,10 @@ public class PlayerController : MonoBehaviour, ITireEventListener {
         {
             if (actions[ControlAction.MainAttack])
             {
-                Debug.Log("START ATTACK");
                 PlayerState.CurrentWeapon.StartUsing();
             }
             else
             {
-                Debug.Log("STOP ATTACK");
                 PlayerState.CurrentWeapon.StopUsing();
             }
         }
