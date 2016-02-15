@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 32dac8b0274c63649a10c8600288e8cf
-timeCreated: 1455381371
+timeCreated: 1455562846
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
@@ -58,7 +58,7 @@ TextureImporter:
     - name: tiger_mutant_0
       rect:
         serializedVersion: 2
-        x: 5
+        x: 63
         y: 76
         width: 32
         height: 22
@@ -69,8 +69,8 @@ TextureImporter:
     - name: tiger_mutant_1
       rect:
         serializedVersion: 2
-        x: 44
-        y: 60
+        x: 46
+        y: 61
         width: 10
         height: 38
       alignment: 9
@@ -80,7 +80,7 @@ TextureImporter:
     - name: tiger_mutant_2
       rect:
         serializedVersion: 2
-        x: 7
+        x: 66
         y: 63
         width: 27
         height: 11
@@ -91,7 +91,7 @@ TextureImporter:
     - name: tiger_mutant_3
       rect:
         serializedVersion: 2
-        x: 3
+        x: 35
         y: 37
         width: 62
         height: 22
@@ -102,7 +102,7 @@ TextureImporter:
     - name: tiger_mutant_4
       rect:
         serializedVersion: 2
-        x: 8
+        x: 47
         y: 7
         width: 45
         height: 25

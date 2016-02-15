@@ -12,11 +12,10 @@ public class ChangedAiTarget : TireEvent
     }
 }
 
-public class EnemyAiState : MonoBehaviour, IUnit
+public class EnemyAiState : MonoBehaviour
 {
     public float FindTargetDistance = 20f;
     public float AttackTargetDistance = 5f;
-    public UnitType UnitType = UnitType.Mutant;
 
     public IEventTire EventTire;
 
@@ -37,11 +36,6 @@ public class EnemyAiState : MonoBehaviour, IUnit
     void Awake()
     {
         EventTire = GetComponent<IEventTire>();
-    }
-
-    public UnitType GetUnitType()
-    {
-        return UnitType;
     }
 
 }

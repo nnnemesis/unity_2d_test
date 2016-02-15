@@ -1,6 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
+public enum RelationType
+{
+    Enemy,
+    Neutral,
+    Friend
+}
+
 public enum EnemyType
 {
     Animal,
