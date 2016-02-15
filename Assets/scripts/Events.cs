@@ -11,6 +11,8 @@ public enum TireEventType
     WeaponUseStateChangedEvent,
     WeaponUseStateDoneEvent,
     ChangedCurrentWeapon,
+    ChangedHealthEvent,
+    ChangedAiTarget,
 }
 
 public abstract class TireEvent

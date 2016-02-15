@@ -12,6 +12,20 @@ public class HitWeaponController : MonoBehaviour, IWeapon, ITireEventListener
         State = GetComponent<WeaponState>();
     }
 
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        Debug.LogWarning("OnTriggerEnter");
+        if(State.UseState == WeaponUseState.Use)
+        {
+            var damagable = other.gameObject.GetComponent<IDamageble>();
+            if(damagable != null)
+            {
+                damagable.InflictDamage(DamageType.Hit, State.DamageAmount);
+            }
+        }
+            
+    }
+
     public void StartUsing()
     {
         if (State.UseStateDone && State.UseState == WeaponUseState.Idle)

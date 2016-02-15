@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerState : MonoBehaviour
+public class PlayerState : MonoBehaviour, IUnit
 {
 
     private IEventTire EventTire;
@@ -23,5 +23,10 @@ public class PlayerState : MonoBehaviour
     void Awake()
     {
         EventTire = GetComponent<IEventTire>();
+    }
+
+    public UnitType GetUnitType()
+    {
+        return UnitType.Player;
     }
 }
