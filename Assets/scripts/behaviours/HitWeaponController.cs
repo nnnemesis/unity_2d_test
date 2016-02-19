@@ -14,7 +14,7 @@ public class HitWeaponController : MonoBehaviour, IWeapon, ITireEventListener
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.LogWarning("OnTriggerEnter");
+        //Debug.LogWarning("OnTriggerEnter");
         if(State.UseState == WeaponUseState.Use)
         {
             var damagable = other.gameObject.GetComponent<IDamageble>();
