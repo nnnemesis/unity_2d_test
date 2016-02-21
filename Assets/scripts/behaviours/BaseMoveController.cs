@@ -1,32 +1,47 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
+// controls unit movements on ground
 public class BaseMoveController : MonoBehaviour, ITireEventListener {
 
     private BaseMoveState BaseState;
     private IEventTire EventTire;
+    private Rigidbody2D Rigidbody;
 
     void Awake()
     {
         EventTire = GetComponent<IEventTire>();
         BaseState = GetComponent<BaseMoveState>();
+        Rigidbody = GetComponent<Rigidbody2D>();
+    }
+
+    void OnEnable()
+    {
+        Rigidbody.gravityScale = 1f;
         EventTire.AddEventListener(TireEventType.ControlEvent, this);
         EventTire.AddEventListener(TireEventType.ChangedMoveStateEvent, this);
         EventTire.AddEventListener(TireEventType.ChangedJumpStateEvent, this);
+    }
+
+    void OnDisable()
+    {
+        EventTire.RemoveEventListener(TireEventType.ControlEvent, this);
+        EventTire.RemoveEventListener(TireEventType.ChangedMoveStateEvent, this);
+        EventTire.RemoveEventListener(TireEventType.ChangedJumpStateEvent, this);
     }
 
     void FixedUpdate()
     {
         if(BaseState.JumpState != JumpState.Grounded)
         {
-            float velocityY = BaseState.Rigidbody.velocity.y;
+            float velocityY = Rigidbody.velocity.y;
             if (velocityY < 0)    // raycast only when fall!
             {
                 if(velocityY < -5)
                 {
                     BaseState.JumpState = JumpState.Fall;
                 }                    
-                Vector2 Position = BaseState.Transform.position;
+                Vector2 Position = transform.position;
                 bool grounded = Physics2D.Linecast(Position, Position + BaseState.GroundCheckVector, LayerMask.GetMask("Ground"));
                 if (grounded)
                 {
@@ -38,7 +53,7 @@ public class BaseMoveController : MonoBehaviour, ITireEventListener {
         if (BaseState.MoveState == MoveState.Walk || BaseState.MoveState == MoveState.ShiftWalk)
         {
             var moveForse = Vector2.right * BaseState.CurrentMoveForse * BaseState.Direction;
-            BaseState.Rigidbody.AddForce(moveForse);
+            Rigidbody.AddForce(moveForse);
         }
             
     }
@@ -73,7 +88,7 @@ public class BaseMoveController : MonoBehaviour, ITireEventListener {
     {
         if(BaseState.JumpState == JumpState.Jump)
         {
-            BaseState.Rigidbody.AddForce(Vector2.up * BaseState.JumpForse);
+            Rigidbody.AddForce(Vector2.up * BaseState.JumpForse);
         }
     }
 

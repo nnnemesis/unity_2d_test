@@ -4,13 +4,40 @@ using System.Collections;
 public class BaseMoveState : MonoBehaviour
 {
     private IEventTire EventTire;
-    public Rigidbody2D Rigidbody;
-    public Transform Transform;
     public float CurrentMoveForse = 0;
+    public float CurrentVerticalMoveForse = 0;
     public float WalkMoveForse = 5;
     public float JumpForse = 200;
     public float ShiftWalkMoveForse = 10;
     public Vector2 GroundCheckVector = Vector2.up * -0.1f;
+
+    private bool _CanUseLadder = false;
+    public bool CanUseLadder
+    {
+        get { return _CanUseLadder; }
+        set
+        {
+            if(_CanUseLadder != value)
+            {
+                _CanUseLadder = value;
+                EventTire.SendEvent(new ChangedCanUseLadder() { NewState = value });
+            }
+        }
+    }
+
+    private UnitMoveControlType _MoveControlType = UnitMoveControlType.GroundControl;
+    public UnitMoveControlType MoveControlType
+    {
+        get { return _MoveControlType; }
+        set
+        {
+            if(_MoveControlType != value)
+            {
+                _MoveControlType = value;
+                EventTire.SendEvent(new ChangedUnitMoveControlType() { NewState = value });
+            }
+        }
+    }
 
     private JumpState _JumpState = JumpState.Grounded;
     public JumpState JumpState
@@ -43,6 +70,20 @@ public class BaseMoveState : MonoBehaviour
         }
     }
 
+    public VerticalMoveState _VerticalMoveState = VerticalMoveState.Idle;
+    public VerticalMoveState VerticalMoveState
+    {
+        get { return _VerticalMoveState; }
+        set
+        {
+            if(_VerticalMoveState != value)
+            {
+                _VerticalMoveState = value;
+                EventTire.SendEvent(new ChangedVerticalMoveStateEvent() { NewState = value });
+            }
+        }
+    }
+
     private sbyte _Direction = 1; // default is right
     public sbyte Direction
     {
@@ -64,8 +105,6 @@ public class BaseMoveState : MonoBehaviour
     void Awake()
     {
         EventTire = GetComponent<IEventTire>();
-        Rigidbody = GetComponent<Rigidbody2D>();
-        Transform = transform;
     }
     
 }

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// Horizontal State
 public enum MoveState
 {
     Walk,
@@ -8,11 +9,18 @@ public enum MoveState
     Idle
 }
 
+public enum VerticalMoveState
+{
+    Up,
+    Down,
+    Idle
+}
+
 public enum JumpState
 {
     Jump,
     Fall,
-    Grounded
+    Grounded,
 }
 
 public enum AttackState
@@ -29,6 +37,17 @@ public class ChangedDirectionEvent : TireEvent
     public override string ToString()
     {
         return "Type " + Type + " Direction " + NewDirection;
+    }
+}
+
+public class ChangedVerticalMoveStateEvent : TireEvent
+{
+    public ChangedVerticalMoveStateEvent() { Type = TireEventType.ChangedVerticalMoveStateEvent; }
+    public VerticalMoveState NewState;
+
+    public override string ToString()
+    {
+        return "Type " + Type + " MoveState " + NewState;
     }
 }
 
@@ -53,6 +72,28 @@ public class ChangedJumpStateEvent : TireEvent
         return "Type " + Type + " JumpState " + NewState;
     }
 
+}
+
+public class ChangedUnitMoveControlType : TireEvent
+{
+    public ChangedUnitMoveControlType() { Type = TireEventType.ChangedUnitMoveControlType; }
+    public UnitMoveControlType NewState;
+
+    public override string ToString()
+    {
+        return "Type " + Type + " NewState " + NewState;
+    }
+}
+
+public class ChangedCanUseLadder : TireEvent
+{
+    public ChangedCanUseLadder() { Type = TireEventType.ChangedCanUseLadder; }
+    public bool NewState;
+
+    public override string ToString()
+    {
+        return "Type " + Type + " NewState " + NewState;
+    }
 }
 
 public class ChangedCurrentWeapon : TireEvent

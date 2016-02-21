@@ -7,12 +7,15 @@ public enum TireEventType
     ControlEvent,
     ChangedDirectionEvent,
     ChangedMoveStateEvent,
+    ChangedVerticalMoveStateEvent,
     ChangedJumpStateEvent,
     WeaponUseStateChangedEvent,
     WeaponUseStateDoneEvent,
     ChangedCurrentWeapon,
     ChangedHealthEvent,
     ChangedAiTarget,
+    ChangedUnitMoveControlType,
+    ChangedCanUseLadder
 }
 
 public abstract class TireEvent
@@ -46,7 +49,7 @@ public class EventTire : IEventTire
         List<ITireEventListener> list;
         if (listeners.TryGetValue(ev.Type, out list))
         {
-            foreach (ITireEventListener listener in list)
+            foreach (ITireEventListener listener in new List<ITireEventListener>(list))
             {
                 listener.OnTireEvent(ev);
             }

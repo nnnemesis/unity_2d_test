@@ -17,6 +17,9 @@ public class KeyBinder : MonoBehaviour {
         KeyMap.Add(KeyCode.Space, ControlAction.Jump);
         KeyMap.Add(KeyCode.LeftShift, ControlAction.Shift);
         KeyMap.Add(KeyCode.RightShift, ControlAction.Shift);
+        KeyMap.Add(KeyCode.E, ControlAction.Use);
+        KeyMap.Add(KeyCode.W, ControlAction.WalkUp);
+        KeyMap.Add(KeyCode.S, ControlAction.WalkDown);
 
         KeyMap.Add(KeyCode.Mouse0, ControlAction.MainAttack);
 

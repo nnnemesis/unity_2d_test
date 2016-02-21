@@ -19,7 +19,9 @@ public class EnemyAiController : MonoBehaviour
         Actions.Add(ControlAction.Jump, false);
         Actions.Add(ControlAction.Shift, false);
         Actions.Add(ControlAction.MainAttack, false);
-
+        Actions.Add(ControlAction.Use, false);
+        Actions.Add(ControlAction.WalkUp, false);
+        Actions.Add(ControlAction.WalkDown, false);
     }
 
     void FixedUpdate()

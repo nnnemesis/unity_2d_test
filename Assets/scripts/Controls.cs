@@ -3,11 +3,14 @@ using System.Collections.Generic;
 
 public enum ControlAction
 {
+    WalkUp,
+    WalkDown,
     WalkForward,
     WalkBack,
     Shift,
     Jump,
-    MainAttack
+    MainAttack,
+    Use,
 }
 
 public class ControlEvent : TireEvent
