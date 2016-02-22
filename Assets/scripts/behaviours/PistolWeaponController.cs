@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class HitWeaponController : MonoBehaviour, IWeapon
+public class PistolWeaponController : MonoBehaviour, IWeapon
 {
     public WeaponState State;
     private IEventTire EventTire;

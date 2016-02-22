@@ -35,7 +35,7 @@ public class EnemyAiController : MonoBehaviour
                 var hitedObject = hit.transform.gameObject;
                 if(GetRelationType(hitedObject) == RelationType.Enemy)
                 {
-                    Debug.Log("New target found " + hitedObject.gameObject.name);
+                    //Debug.Log("New target found " + hitedObject.gameObject.name);
                     EnemyAiState.CurrentTarget = hitedObject;
                     break;
                 }
@@ -74,11 +74,11 @@ public class EnemyAiController : MonoBehaviour
             }
             if (changed)
             {
-                Debug.Log("AI actions");
-                foreach (var pair in Actions)
-                {
-                    Debug.Log("AI action "+ pair.Key + " value "+pair.Value);
-                }
+                //Debug.Log("AI actions");
+                //foreach (var pair in Actions)
+                //{
+                //    Debug.Log("AI action "+ pair.Key + " value "+pair.Value);
+                //}
                 EventTire.SendEvent(new ControlEvent() { Actions = Actions });
             }                
         }

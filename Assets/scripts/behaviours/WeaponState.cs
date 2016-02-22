@@ -4,8 +4,6 @@ using System.Collections;
 public class WeaponState : MonoBehaviour
 {
     private IEventTire EventTire;
-    public Transform Transform;
-    public Rigidbody2D Rigidbody;
     public WeaponType Type;
     
     public int CurrentMagazineAmmo = 0;
@@ -15,7 +13,7 @@ public class WeaponState : MonoBehaviour
     public float OneUseTime = 0.5f;   // sec
     public float DamageAmount = 20f;
 
-    public WeaponUseState _UseState = WeaponUseState.Idle;
+    private WeaponUseState _UseState = WeaponUseState.Idle;
     public WeaponUseState UseState
     {
         get { return _UseState; }
@@ -29,25 +27,9 @@ public class WeaponState : MonoBehaviour
         }
     }
 
-    public bool _UseStateDone = true;
-    public bool UseStateDone
-    {
-        get { return _UseStateDone; }
-        set
-        {
-            if(_UseStateDone != value)
-            {
-                _UseStateDone = value;
-                EventTire.SendEvent(new WeaponUseStateDoneEvent() { WeaponState = this });
-            }
-        }
-    }
-
     void Awake()
     {
         EventTire = GetComponent<IEventTire>();
-        Rigidbody = GetComponent<Rigidbody2D>();
-        Transform = transform;
     }
     
 }

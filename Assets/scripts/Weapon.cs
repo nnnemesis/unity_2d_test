@@ -37,19 +37,3 @@ public class WeaponUseStateChangedEvent : TireEvent
     }
 
 }
-
-public class WeaponUseStateDoneEvent : TireEvent
-{
-    public WeaponState WeaponState;
-
-    public WeaponUseStateDoneEvent()
-    {
-        Type = TireEventType.WeaponUseStateDoneEvent;
-    }
-
-    public override string ToString()
-    {
-        return "Type " + Type + " WeaponState " + WeaponState;
-    }
-
-}
