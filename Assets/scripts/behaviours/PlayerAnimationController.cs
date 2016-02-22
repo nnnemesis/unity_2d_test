@@ -26,7 +26,7 @@ public class PlayerAnimationController : MonoBehaviour, ITireEventListener {
     {
         if(ev.Type == TireEventType.WeaponUseStateChangedEvent)
         {
-            OnWeaponUseStateChangedEvent((WeaponUseStateChangedEvent)ev);
+            //OnWeaponUseStateChangedEvent((WeaponUseStateChangedEvent)ev);
         }
         else if (ev.Type == TireEventType.ChangedCurrentWeapon)
         {

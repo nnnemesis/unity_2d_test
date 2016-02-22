@@ -3,7 +3,7 @@ using System.Collections;
 
 public class HitWeaponController : MonoBehaviour, IWeapon
 {
-    public WeaponState State;
+    private WeaponState State;
     private IEventTire EventTire;
 
     void Awake()
