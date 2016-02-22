@@ -34,7 +34,11 @@ public class PlayerController : MonoBehaviour, ITireEventListener {
         Dictionary<ControlAction, bool> actions = e.Actions;
         if(PlayerState.CurrentWeapon != null)
         {
-            if (actions[ControlAction.MainAttack])
+            if (actions[ControlAction.Recharge])
+            {
+                PlayerState.CurrentWeapon.Recharge();
+            }
+            else if (actions[ControlAction.MainAttack])
             {
                 PlayerState.CurrentWeapon.StartUsing();
             }

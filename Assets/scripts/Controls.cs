@@ -11,6 +11,7 @@ public enum ControlAction
     Jump,
     MainAttack,
     Use,
+    Recharge
 }
 
 public class ControlEvent : TireEvent

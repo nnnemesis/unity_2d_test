@@ -14,23 +14,9 @@ public class PistolWeaponController : MonoBehaviour, IWeapon
         State = GetComponent<WeaponState>();
     }
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        //Debug.LogWarning("OnTriggerEnter");
-        if(State.UseState == WeaponUseState.Use)
-        {
-            var damagable = other.gameObject.GetComponent<IDamageble>();
-            if(damagable != null)
-            {
-                damagable.InflictDamage(DamageType.Hit, State.DamageAmount);
-            }
-        }
-            
-    }
-
     public void StartUsing()
     {
-        if (State.UseState == WeaponUseState.Idle)
+        if (State.UseState == WeaponUseState.Idle && State.CurrentMagazineAmmo > 0)
         {
             State.UseState = WeaponUseState.Use;
             MakeShot();
@@ -40,6 +26,7 @@ public class PistolWeaponController : MonoBehaviour, IWeapon
 
     private void MakeShot()
     {
+        State.CurrentMagazineAmmo -= 1;
         var camera = Camera.main;
         var screenMousePosition = Input.mousePosition;
         var worldMousePosition = camera.ScreenToWorldPoint(screenMousePosition);
@@ -54,8 +41,7 @@ public class PistolWeaponController : MonoBehaviour, IWeapon
 
     private void UsingDone()
     {
-        if (State.UseState == WeaponUseState.Use)
-            State.UseState = WeaponUseState.Idle;
+        State.UseState = WeaponUseState.Idle;
     }
 
     public void StopUsing()
@@ -66,7 +52,32 @@ public class PistolWeaponController : MonoBehaviour, IWeapon
 
     public void Recharge()
     {
-        //need recharge
+        if (State.UseState != WeaponUseState.Reload)
+        {
+            State.UseState = WeaponUseState.Reload;
+            DoRecharge();
+            Invoke("UsingDone", State.ReloadTime);
+        }
+    }
+
+    void DoRecharge()
+    {
+        var currentTotal = State.CurrentTotalAmmo;
+        if (currentTotal > 0)
+        {
+            var currentInMagazine = State.CurrentMagazineAmmo;
+            var restTotal = currentTotal + currentInMagazine - State.MaxMagazineAmmo;
+            if (restTotal >= 0)
+            {
+                State.CurrentMagazineAmmo = State.MaxMagazineAmmo;
+                State.CurrentTotalAmmo = restTotal;
+            }
+            else
+            {
+                State.CurrentMagazineAmmo = currentTotal + currentInMagazine;
+                State.CurrentTotalAmmo = 0;
+            }
+        }
     }
 
     public IEventTire GetTire()

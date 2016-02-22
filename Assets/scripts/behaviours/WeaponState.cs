@@ -8,7 +8,8 @@ public class WeaponState : MonoBehaviour
     
     public int CurrentMagazineAmmo = 0;
     public int CurrentTotalAmmo = 0;
-    public int MaxAmmo = 0;
+    public int MaxTotalAmmo = 0;
+    public int MaxMagazineAmmo = 0;
     public float ReloadTime = 0;
     public float OneUseTime = 0.5f;   // sec
     public float DamageAmount = 20f;

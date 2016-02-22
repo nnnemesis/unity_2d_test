@@ -20,6 +20,7 @@ public class KeyBinder : MonoBehaviour {
         KeyMap.Add(KeyCode.E, ControlAction.Use);
         KeyMap.Add(KeyCode.W, ControlAction.WalkUp);
         KeyMap.Add(KeyCode.S, ControlAction.WalkDown);
+        KeyMap.Add(KeyCode.R, ControlAction.Recharge);
 
         KeyMap.Add(KeyCode.Mouse0, ControlAction.MainAttack);
 
