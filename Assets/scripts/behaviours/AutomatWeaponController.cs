@@ -1,12 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PistolWeaponController : MonoBehaviour, IWeapon
+public class AutomatWeaponController : MonoBehaviour, IWeapon
 {
     private WeaponState State;
     private IEventTire EventTire;
     public GameObject BulletPrefab;
     public Transform BulletSpawnPosition;
+
+    private Coroutine ReloadRoutine;
+    private Coroutine AutoShootRoutine;
 
     void Awake()
     {
@@ -19,9 +22,18 @@ public class PistolWeaponController : MonoBehaviour, IWeapon
         if (State.UseState == WeaponUseState.Idle && State.CurrentMagazineAmmo > 0)
         {
             State.UseState = WeaponUseState.Use;
-            MakeShot();
-            Invoke("UsingDone", State.OneUseTime);
+            AutoShootRoutine = StartCoroutine(AutoShootCoroutine());
         }            
+    }
+
+    IEnumerator AutoShootCoroutine()
+    {
+        while(State.CurrentMagazineAmmo > 0)
+        {
+            MakeShot();
+            yield return new WaitForSeconds(State.OneUseTime);
+        }
+        State.UseState = WeaponUseState.Idle;
     }
 
     private void MakeShot()
@@ -39,15 +51,22 @@ public class PistolWeaponController : MonoBehaviour, IWeapon
         GameObject bullet = (GameObject)Instantiate(BulletPrefab, BulletSpawnPosition.position, Quaternion.FromToRotation(Vector3.right, worldMousePosition - spawnPosition));
     }
 
-    private void UsingDone()
-    {
-        State.UseState = WeaponUseState.Idle;
-    }
-
     public void StopUsing()
     {
-        // no reaction, pistol will travel to idle after one use
+        if(State.UseState == WeaponUseState.Use)
+        {
+            State.UseState = WeaponUseState.Idle;
+            StopAutoShootingRoutine();
+        }
+    }
 
+    void StopAutoShootingRoutine()
+    {
+        if (AutoShootRoutine != null)
+        {
+            StopCoroutine(AutoShootRoutine);
+            AutoShootRoutine = null;
+        }
     }
 
     public void Recharge()
@@ -55,9 +74,16 @@ public class PistolWeaponController : MonoBehaviour, IWeapon
         if (State.UseState != WeaponUseState.Reload)
         {
             State.UseState = WeaponUseState.Reload;
-            DoRecharge();
-            Invoke("UsingDone", State.ReloadTime);
+            StopAutoShootingRoutine();
+            ReloadRoutine = StartCoroutine(ReloadCoroutine());
         }
+    }
+
+    IEnumerator ReloadCoroutine()
+    {
+        yield return new WaitForSeconds(State.ReloadTime);
+        DoRecharge();
+        State.UseState = WeaponUseState.Idle;
     }
 
     void DoRecharge()

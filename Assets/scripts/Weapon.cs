@@ -5,7 +5,8 @@ public enum WeaponType
 {
     Hand,
     Axe,
-    Pistol
+    Pistol,
+    Automat
 }
 
 public enum WeaponUseState
