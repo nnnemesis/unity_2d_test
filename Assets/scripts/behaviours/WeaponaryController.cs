@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class PlayerController : MonoBehaviour, ITireEventListener {
+public class WeaponaryController : MonoBehaviour, ITireEventListener {
 
-    private PlayerState PlayerState;
+    private UnitState UnitState;
     private IEventTire EventTire;
     public Transform LeftHandTransform;
     public GameObject InitWeapon;   // test
@@ -11,14 +11,14 @@ public class PlayerController : MonoBehaviour, ITireEventListener {
     void Awake()
     {
         EventTire = GetComponent<IEventTire>();
-        PlayerState = GetComponent<PlayerState>();
+        UnitState = GetComponent<UnitState>();
         EventTire.AddEventListener(TireEventType.ControlEvent, this);
     }
 
     void Start() {
         GameObject testWeapon = (GameObject)Instantiate(InitWeapon, Vector3.zero, Quaternion.identity);
         testWeapon.transform.SetParent(LeftHandTransform, false);
-        PlayerState.CurrentWeapon = testWeapon.GetComponent<IWeapon>();
+        UnitState.CurrentWeapon = testWeapon.GetComponent<IWeapon>();
     }
 	
     public void OnTireEvent(TireEvent ev)
@@ -32,19 +32,19 @@ public class PlayerController : MonoBehaviour, ITireEventListener {
     private void OnControlEvent(ControlEvent e)
     {
         Dictionary<ControlAction, bool> actions = e.Actions;
-        if(PlayerState.CurrentWeapon != null)
+        if(UnitState.CurrentWeapon != null)
         {
             if (actions[ControlAction.Recharge])
             {
-                PlayerState.CurrentWeapon.Recharge();
+                UnitState.CurrentWeapon.Recharge();
             }
             else if (actions[ControlAction.MainAttack])
             {
-                PlayerState.CurrentWeapon.StartUsing();
+                UnitState.CurrentWeapon.StartUsing();
             }
             else
             {
-                PlayerState.CurrentWeapon.StopUsing();
+                UnitState.CurrentWeapon.StopUsing();
             }
         }
     }

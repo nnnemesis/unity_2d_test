@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerState : MonoBehaviour
+public class UnitState : MonoBehaviour
 {
 
     private IEventTire EventTire;
