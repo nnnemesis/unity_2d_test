@@ -10,6 +10,8 @@ public enum TireEventType
     ChangedVerticalMoveStateEvent,
     ChangedJumpStateEvent,
     WeaponUseStateChangedEvent,
+    WeaponCurrentAmmoChangedEvent,
+    WeaponCurrentTotalAmmoChangedEvent,
     ChangedCurrentWeapon,
     ChangedHealthEvent,
     ChangedAiTarget,

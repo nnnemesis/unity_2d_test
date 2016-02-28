@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
-public class AutomatWeaponController : MonoBehaviour, IWeapon
+public class AutomatWeaponController : MonoBehaviour,ITireEventListener
 {
     private WeaponState State;
     private IEventTire EventTire;
@@ -13,11 +14,37 @@ public class AutomatWeaponController : MonoBehaviour, IWeapon
 
     void Awake()
     {
-        EventTire = GetComponent<IEventTire>();
         State = GetComponent<WeaponState>();
     }
 
-    public void StartUsing()
+    void Start()
+    {
+        EventTire = GetComponent<IEventTire>();
+        EventTire.AddEventListener(TireEventType.ControlEvent, this);
+    }
+
+    public void OnTireEvent(TireEvent ev)
+    {
+        if (ev.Type == TireEventType.ControlEvent)
+        {
+            OnControlEvent((ControlEvent)ev);
+        }
+    }
+
+    void OnControlEvent(ControlEvent e)
+    {
+        Dictionary<ControlAction, bool> actions = e.Actions;
+        if (actions[ControlAction.MainAttack])
+        {
+            StartUsing();
+        }
+        else
+        {
+            StopUsing();
+        }
+    }
+
+    void StartUsing()
     {
         if (State.UseState == WeaponUseState.Idle && State.CurrentMagazineAmmo > 0)
         {
@@ -28,7 +55,7 @@ public class AutomatWeaponController : MonoBehaviour, IWeapon
 
     IEnumerator AutoShootCoroutine()
     {
-        while(State.CurrentMagazineAmmo > 0)
+        while(State.CurrentMagazineAmmo > 0 && State.UseState == WeaponUseState.Use)
         {
             MakeShot();
             yield return new WaitForSeconds(State.OneUseTime);
@@ -36,7 +63,7 @@ public class AutomatWeaponController : MonoBehaviour, IWeapon
         State.UseState = WeaponUseState.Idle;
     }
 
-    private void MakeShot()
+    void MakeShot()
     {
         State.CurrentMagazineAmmo -= 1;
         var camera = Camera.main;
@@ -51,7 +78,7 @@ public class AutomatWeaponController : MonoBehaviour, IWeapon
         GameObject bullet = (GameObject)Instantiate(BulletPrefab, BulletSpawnPosition.position, Quaternion.FromToRotation(Vector3.right, worldMousePosition - spawnPosition));
     }
 
-    public void StopUsing()
+    void StopUsing()
     {
         if(State.UseState == WeaponUseState.Use)
         {
@@ -67,48 +94,6 @@ public class AutomatWeaponController : MonoBehaviour, IWeapon
             StopCoroutine(AutoShootRoutine);
             AutoShootRoutine = null;
         }
-    }
-
-    public void Recharge()
-    {
-        if (State.UseState != WeaponUseState.Reload)
-        {
-            State.UseState = WeaponUseState.Reload;
-            StopAutoShootingRoutine();
-            ReloadRoutine = StartCoroutine(ReloadCoroutine());
-        }
-    }
-
-    IEnumerator ReloadCoroutine()
-    {
-        yield return new WaitForSeconds(State.ReloadTime);
-        DoRecharge();
-        State.UseState = WeaponUseState.Idle;
-    }
-
-    void DoRecharge()
-    {
-        var currentTotal = State.CurrentTotalAmmo;
-        if (currentTotal > 0)
-        {
-            var currentInMagazine = State.CurrentMagazineAmmo;
-            var restTotal = currentTotal + currentInMagazine - State.MaxMagazineAmmo;
-            if (restTotal >= 0)
-            {
-                State.CurrentMagazineAmmo = State.MaxMagazineAmmo;
-                State.CurrentTotalAmmo = restTotal;
-            }
-            else
-            {
-                State.CurrentMagazineAmmo = currentTotal + currentInMagazine;
-                State.CurrentTotalAmmo = 0;
-            }
-        }
-    }
-
-    public IEventTire GetTire()
-    {
-        return EventTire;
     }
 
 }

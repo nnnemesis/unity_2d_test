@@ -36,10 +36,10 @@ public class PlayerAnimationController : MonoBehaviour, ITireEventListener {
 
     private void OnPlayerChangedCurrentWeapon(ChangedCurrentWeapon e)
     {
-        if (e.NewCurrentWeapon != null)
-        {
-            e.NewCurrentWeapon.GetTire().AddEventListener(TireEventType.WeaponUseStateChangedEvent, this);
-        }
+        //if (e.NewCurrentWeapon != null)
+        //{
+        //    e.NewCurrentWeapon.GetTire().AddEventListener(TireEventType.WeaponUseStateChangedEvent, this);
+        //}
     }
 
     private void OnWeaponUseStateChangedEvent(WeaponUseStateChangedEvent ev)

@@ -16,11 +16,34 @@ public enum WeaponUseState
     Reload
 }
 
-public interface IWeapon : IHasEventTire
+public class WeaponCurrentTotalAmmoChangedEvent : TireEvent
 {
-    void StartUsing();
-    void StopUsing();
-    void Recharge();
+    public int NewState;
+
+    public WeaponCurrentTotalAmmoChangedEvent()
+    {
+        Type = TireEventType.WeaponCurrentTotalAmmoChangedEvent;
+    }
+
+    public override string ToString()
+    {
+        return "Type " + Type + " NewState " + NewState;
+    }
+}
+
+public class WeaponCurrentAmmoChangedEvent : TireEvent
+{
+    public int NewState;
+
+    public WeaponCurrentAmmoChangedEvent()
+    {
+        Type = TireEventType.WeaponCurrentAmmoChangedEvent;
+    }
+
+    public override string ToString()
+    {
+        return "Type " + Type + " NewState " + NewState;
+    }
 }
 
 public class WeaponUseStateChangedEvent : TireEvent

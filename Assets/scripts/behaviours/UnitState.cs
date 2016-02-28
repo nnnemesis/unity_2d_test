@@ -6,8 +6,8 @@ public class UnitState : MonoBehaviour
 
     private IEventTire EventTire;
 
-    private IWeapon _CurrentWeapon;
-    public IWeapon CurrentWeapon
+    private GameObject _CurrentWeapon;
+    public GameObject CurrentWeapon
     {
         get { return _CurrentWeapon; }
         set

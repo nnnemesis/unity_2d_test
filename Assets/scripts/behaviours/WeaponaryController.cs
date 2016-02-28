@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class WeaponaryController : MonoBehaviour, ITireEventListener {
+public class WeaponaryController : MonoBehaviour {
 
     private UnitState UnitState;
     private IEventTire EventTire;
@@ -12,40 +12,14 @@ public class WeaponaryController : MonoBehaviour, ITireEventListener {
     {
         EventTire = GetComponent<IEventTire>();
         UnitState = GetComponent<UnitState>();
-        EventTire.AddEventListener(TireEventType.ControlEvent, this);
     }
 
     void Start() {
         GameObject testWeapon = (GameObject)Instantiate(InitWeapon, Vector3.zero, Quaternion.identity);
+        SingleEventTireProxy proxy = testWeapon.AddComponent<SingleEventTireProxy>();
+        proxy.Instance = EventTire;
         testWeapon.transform.SetParent(LeftHandTransform, false);
-        UnitState.CurrentWeapon = testWeapon.GetComponent<IWeapon>();
+        UnitState.CurrentWeapon = testWeapon;
     }
 	
-    public void OnTireEvent(TireEvent ev)
-    {
-        if(ev.Type == TireEventType.ControlEvent)
-        {
-            OnControlEvent((ControlEvent)ev);
-        }
-    }
-
-    private void OnControlEvent(ControlEvent e)
-    {
-        Dictionary<ControlAction, bool> actions = e.Actions;
-        if(UnitState.CurrentWeapon != null)
-        {
-            if (actions[ControlAction.Recharge])
-            {
-                UnitState.CurrentWeapon.Recharge();
-            }
-            else if (actions[ControlAction.MainAttack])
-            {
-                UnitState.CurrentWeapon.StartUsing();
-            }
-            else
-            {
-                UnitState.CurrentWeapon.StopUsing();
-            }
-        }
-    }
 }

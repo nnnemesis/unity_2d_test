@@ -99,7 +99,7 @@ public class ChangedCanUseLadder : TireEvent
 public class ChangedCurrentWeapon : TireEvent
 {
     public ChangedCurrentWeapon() { Type = TireEventType.ChangedCurrentWeapon; }
-    public IWeapon NewCurrentWeapon;
+    public GameObject NewCurrentWeapon;
 
     public override string ToString()
     {

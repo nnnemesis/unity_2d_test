@@ -1,15 +1,37 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
-public class HitWeaponController : MonoBehaviour, IWeapon
+public class HitWeaponController : MonoBehaviour, ITireEventListener
 {
     private WeaponState State;
     private IEventTire EventTire;
 
     void Awake()
     {
-        EventTire = GetComponent<IEventTire>();
         State = GetComponent<WeaponState>();
+    }
+
+    void Start()
+    {
+        EventTire = GetComponent<IEventTire>();
+        EventTire.AddEventListener(TireEventType.ControlEvent, this);
+    }
+
+    public void OnTireEvent(TireEvent ev)
+    {
+        if (ev.Type == TireEventType.ControlEvent)
+        {
+            OnControlEvent((ControlEvent)ev);
+        }
+    }
+
+    void OnControlEvent(ControlEvent e)
+    {
+        Dictionary<ControlAction, bool> actions = e.Actions;
+        if (actions[ControlAction.MainAttack])
+        {
+            StartUsing();
+        }
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -26,7 +48,7 @@ public class HitWeaponController : MonoBehaviour, IWeapon
             
     }
 
-    public void StartUsing()
+    void StartUsing()
     {
         if (State.UseState == WeaponUseState.Idle)
         {
@@ -35,25 +57,10 @@ public class HitWeaponController : MonoBehaviour, IWeapon
         }            
     }
 
-    private void UsingDone()
+    void UsingDone()
     {
         if (State.UseState == WeaponUseState.Use)
             State.UseState = WeaponUseState.Idle;
-    }
-
-    public void StopUsing()
-    {
-        // no reaction, axe will travel to idle after one use
-    }
-
-    public void Recharge()
-    {
-        // no reaction, axe dosent need recharging
-    }
-
-    public IEventTire GetTire()
-    {
-        return EventTire;
     }
 
 }

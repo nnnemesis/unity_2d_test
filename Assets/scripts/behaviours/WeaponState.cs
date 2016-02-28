@@ -5,9 +5,35 @@ public class WeaponState : MonoBehaviour
 {
     private IEventTire EventTire;
     public WeaponType Type;
-    
-    public int CurrentMagazineAmmo = 0;
-    public int CurrentTotalAmmo = 0;
+
+    public int _CurrentMagazineAmmo = 0;
+    public int CurrentMagazineAmmo
+    {
+        get { return _CurrentMagazineAmmo; }
+        set
+        {
+            if (_CurrentMagazineAmmo != value)
+            {
+                _CurrentMagazineAmmo = value;
+                EventTire.SendEvent(new WeaponCurrentAmmoChangedEvent() { NewState = value });
+            }
+        }
+    }
+
+    public int _CurrentTotalAmmo = 0;
+    public int CurrentTotalAmmo
+    {
+        get { return _CurrentTotalAmmo; }
+        set
+        {
+            if (_CurrentTotalAmmo != value)
+            {
+                _CurrentTotalAmmo = value;
+                EventTire.SendEvent(new WeaponCurrentTotalAmmoChangedEvent() { NewState = value });
+            }
+        }
+    }
+
     public int MaxTotalAmmo = 0;
     public int MaxMagazineAmmo = 0;
     public float ReloadTime = 0;
@@ -28,7 +54,7 @@ public class WeaponState : MonoBehaviour
         }
     }
 
-    void Awake()
+    void Start()
     {
         EventTire = GetComponent<IEventTire>();
     }
