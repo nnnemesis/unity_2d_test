@@ -28,6 +28,9 @@ public class KeyBinder : MonoBehaviour {
         {
             State[pair.Value] = false;
         }
+
+        State[ControlAction.NextWeapon] = false;
+        State[ControlAction.PrevWeapon] = false;
     }
 
     void Start () {
@@ -52,7 +55,22 @@ public class KeyBinder : MonoBehaviour {
                 changed = true;
             }
         }
-        if(changed)
+
+        float mouseScrollWheel = Input.GetAxis("Mouse ScrollWheel");
+        State[ControlAction.PrevWeapon] = false;
+        State[ControlAction.NextWeapon] = false;
+        if (mouseScrollWheel > 0)
+        {
+            State[ControlAction.NextWeapon] = true;
+            changed = true;
+        }
+        else if (mouseScrollWheel < 0)
+        {
+            State[ControlAction.PrevWeapon] = true;
+            changed = true;
+        }
+
+        if (changed)
         {
             //Debug.Log("ControlEvent");
             EventTire.SendEvent(new ControlEvent() { Actions = State });

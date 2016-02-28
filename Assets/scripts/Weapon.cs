@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 public enum WeaponType
 {
-    Hand,
+    None,
     Axe,
+    Stick,
     Pistol,
     Automat
 }
@@ -14,6 +15,26 @@ public enum WeaponUseState
     Idle,
     Use,
     Reload
+}
+
+public class SavedWeaponState
+{
+    public WeaponType WeaponType;
+    public int CurrentMagazineAmmo = 0;
+    public int CurrentTotalAmmo = 0;
+    public int MaxTotalAmmo = 0;
+    public int MaxMagazineAmmo = 0;
+    public float ReloadTime = 0;
+    public float OneUseTime = 0.5f;
+    public float DamageAmount = 20f;
+
+    public override string ToString()
+    {
+        return "WeaponType " + WeaponType + " CurrentMagazineAmmo " + CurrentMagazineAmmo + " CurrentTotalAmmo "+ CurrentTotalAmmo
+            + " MaxTotalAmmo " + MaxTotalAmmo + " MaxMagazineAmmo " + MaxMagazineAmmo + " ReloadTime " + ReloadTime + " OneUseTime " + OneUseTime 
+            + " DamageAmount " + DamageAmount;
+    }
+
 }
 
 public class WeaponCurrentTotalAmmoChangedEvent : TireEvent
@@ -58,6 +79,37 @@ public class WeaponUseStateChangedEvent : TireEvent
     public override string ToString()
     {
         return "Type " + Type + " WeaponUseState " + NewState;
+    }
+
+}
+
+public class LoadWeaponStateEvent : TireEvent
+{
+    public SavedWeaponState SavedWeaponState;
+
+    public LoadWeaponStateEvent()
+    {
+        Type = TireEventType.LoadWeaponStateEvent;
+    }
+
+    public override string ToString()
+    {
+        return "Type " + Type + " SavedWeaponState " + SavedWeaponState;
+    }
+}
+
+public class SaveWeaponStateEvent : TireEvent
+{
+    public SavedWeaponState SavedWeaponState;
+
+    public SaveWeaponStateEvent()
+    {
+        Type = TireEventType.SaveWeaponStateEvent;
+    }
+
+    public override string ToString()
+    {
+        return "Type " + Type + " SavedWeaponState " + SavedWeaponState;
     }
 
 }

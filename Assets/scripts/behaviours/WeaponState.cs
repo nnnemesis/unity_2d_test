@@ -4,7 +4,7 @@ using System.Collections;
 public class WeaponState : MonoBehaviour
 {
     private IEventTire EventTire;
-    public WeaponType Type;
+    public WeaponType WeaponType;
 
     public int _CurrentMagazineAmmo = 0;
     public int CurrentMagazineAmmo
