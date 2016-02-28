@@ -22,7 +22,7 @@ public class BaseLifeState : MonoBehaviour
         }
     }
 
-    void Awake()
+    void Start()
     {
         EventTire = GetComponent<IEventTire>();
     }

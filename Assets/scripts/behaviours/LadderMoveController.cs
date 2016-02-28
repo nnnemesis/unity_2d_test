@@ -8,28 +8,21 @@ public class LadderMoveController : MonoBehaviour, ITireEventListener {
     private Rigidbody2D Rigidbody;
     private BaseMoveState BaseState;
 
-    void Awake()
+    void Start()
     {
         EventTire = GetComponent<IEventTire>();
         Rigidbody = GetComponent<Rigidbody2D>();
         BaseState = GetComponent<BaseMoveState>();
-    }
-
-    void Start()
-    {
         BaseState.VerticalMoveState = VerticalMoveState.Idle;
         BaseState.MoveState = MoveState.Idle;
-    }
 
-    void OnEnable()
-    {
         EventTire.AddEventListener(TireEventType.ControlEvent, this);
         EventTire.AddEventListener(TireEventType.ChangedMoveStateEvent, this);
         EventTire.AddEventListener(TireEventType.ChangedJumpStateEvent, this);
-        Rigidbody.gravityScale = 0f;        
+        Rigidbody.gravityScale = 0f;
     }
 
-    void OnDisable()
+    void OnDestroy()
     {
         EventTire.RemoveEventListener(TireEventType.ControlEvent, this);
         EventTire.RemoveEventListener(TireEventType.ChangedMoveStateEvent, this);

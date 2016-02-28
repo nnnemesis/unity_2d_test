@@ -6,22 +6,14 @@ public class PlayerAnimationController : MonoBehaviour, ITireEventListener {
     private Animator Animator;
     private IEventTire EventTire;
 
-    void Awake()
+    void Start ()
     {
         EventTire = GetComponent<IEventTire>();
         Animator = GetComponent<Animator>();
         EventTire.AddEventListener(TireEventType.ChangedCurrentWeapon, this);
         EventTire.AddEventListener(TireEventType.WeaponUseStateChangedEvent, this);
     }
-
-    void Start () {
-        
-    }
 	
-	void Update ()
-    {
-    }
-
     public void OnTireEvent(TireEvent ev)
     {
         if(ev.Type == TireEventType.WeaponUseStateChangedEvent)

@@ -5,7 +5,7 @@ public class BaseLifeController : MonoBehaviour, IDamageble
 {
     private BaseLifeState BaseLifeState;
 
-    void Awake()
+    void Start()
     {
         BaseLifeState = GetComponent<BaseLifeState>();
     }

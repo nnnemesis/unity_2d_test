@@ -6,20 +6,12 @@ public class BaseMoveAnimationController : MonoBehaviour, ITireEventListener {
     private Animator Animator;
     private IEventTire EventTire;
 
-    void Awake()
+    void Start()
     {
         EventTire = GetComponent<IEventTire>();
         Animator = GetComponent<Animator>();
         EventTire.AddEventListener(TireEventType.ChangedMoveStateEvent, this);
         EventTire.AddEventListener(TireEventType.ChangedJumpStateEvent, this);
-    }
-
-    void Start () {
-        
-    }
-	
-	void Update ()
-    {
     }
 
     public void OnTireEvent(TireEvent ev)

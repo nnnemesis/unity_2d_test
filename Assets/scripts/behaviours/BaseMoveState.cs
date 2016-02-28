@@ -102,7 +102,7 @@ public class BaseMoveState : MonoBehaviour
 
     }
 
-    void Awake()
+    void Start()
     {
         EventTire = GetComponent<IEventTire>();
     }

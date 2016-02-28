@@ -7,10 +7,6 @@ public class BaseBulletController : MonoBehaviour
     public float DamageAmount = 5f;
     public float LifeTime = 15f;
 
-    void Awake()
-    {
-    }
-
     void OnTriggerEnter2D(Collider2D other)
     {
         //Debug.LogWarning("OnTriggerEnter");

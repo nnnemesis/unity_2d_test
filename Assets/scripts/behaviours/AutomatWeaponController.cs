@@ -12,13 +12,9 @@ public class AutomatWeaponController : MonoBehaviour,ITireEventListener
     private Coroutine ReloadRoutine;
     private Coroutine AutoShootRoutine;
 
-    void Awake()
-    {
-        State = GetComponent<WeaponState>();
-    }
-
     void Start()
     {
+        State = GetComponent<WeaponState>();
         EventTire = GetComponent<IEventTire>();
         EventTire.AddEventListener(TireEventType.ControlEvent, this);
     }
@@ -73,7 +69,7 @@ public class AutomatWeaponController : MonoBehaviour,ITireEventListener
         //Debug.Log("worldMousePosition " + worldMousePosition);
         var spawnPosition = BulletSpawnPosition.position;
         //Debug.Log("spawnPosition " + spawnPosition);
-        var angle = Vector3.Angle(Vector3.right, worldMousePosition - spawnPosition);
+        //var angle = Vector3.Angle(Vector3.right, worldMousePosition - spawnPosition);
         //Debug.Log("angle " + angle);
         GameObject bullet = (GameObject)Instantiate(BulletPrefab, BulletSpawnPosition.position, Quaternion.FromToRotation(Vector3.right, worldMousePosition - spawnPosition));
     }

@@ -26,7 +26,7 @@ public class PrefabStore : MonoBehaviour
     public List<Pair> PrefabsList = new List<Pair>();
     private Dictionary<PrefabIdentifier, GameObject> PrefabsMap = new Dictionary<PrefabIdentifier, GameObject>();
 
-    void Awake()
+    void Start()
     {
         Instance = this;
         foreach(var pair in PrefabsList)
@@ -37,7 +37,7 @@ public class PrefabStore : MonoBehaviour
 
     public GameObject GetPrefab(PrefabIdentifier identifier)
     {
-        Debug.Log("GetPrefab "+identifier);
+        //Debug.Log("GetPrefab "+identifier);
         return PrefabsMap[identifier];
     }
     

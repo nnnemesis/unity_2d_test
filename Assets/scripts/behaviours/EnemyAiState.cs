@@ -33,7 +33,7 @@ public class EnemyAiState : MonoBehaviour
         }
     }
 
-    void Awake()
+    void Start()
     {
         EventTire = GetComponent<IEventTire>();
     }

@@ -6,13 +6,9 @@ public class HitWeaponController : MonoBehaviour, ITireEventListener
     private WeaponState State;
     private IEventTire EventTire;
 
-    void Awake()
-    {
-        State = GetComponent<WeaponState>();
-    }
-
     void Start()
     {
+        State = GetComponent<WeaponState>();
         EventTire = GetComponent<IEventTire>();
         EventTire.AddEventListener(TireEventType.ControlEvent, this);
     }

@@ -8,7 +8,7 @@ public class EnemyAiController : MonoBehaviour
     private Dictionary<ControlAction, bool> Actions = new Dictionary<ControlAction, bool>();
     private IUnit SelfUnit;
 
-    void Awake()
+    void Start()
     {
         EnemyAiState = GetComponent<EnemyAiState>();
         EventTire = GetComponent<IEventTire>();

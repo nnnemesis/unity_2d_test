@@ -5,17 +5,12 @@ public class UnitChangeControlController : MonoBehaviour, ITireEventListener {
 
     private BaseMoveState BaseMoveState;
     private IEventTire EventTire;
-    private BaseMoveController BaseMoveController;
-    private LadderMoveController LadderMoveController;
 
-    void Awake()
+    void Start()
     {
         EventTire = GetComponent<IEventTire>();
         BaseMoveState = GetComponent<BaseMoveState>();
         EventTire.AddEventListener(TireEventType.ControlEvent, this);
-        BaseMoveController = GetComponent<BaseMoveController>();
-        LadderMoveController = GetComponent<LadderMoveController>();
-        LadderMoveController.enabled = false;
     }
 
     public void OnTireEvent(TireEvent ev)
@@ -42,8 +37,8 @@ public class UnitChangeControlController : MonoBehaviour, ITireEventListener {
         {
             BaseMoveState.MoveControlType = UnitMoveControlType.GroundControl;
             BaseMoveState.CanUseLadder = false;
-            BaseMoveController.enabled = true;
-            LadderMoveController.enabled = false;
+            Destroy(GetComponent<LadderMoveController>());
+            gameObject.AddComponent<BaseMoveController>();
         }
     }
 
@@ -54,8 +49,8 @@ public class UnitChangeControlController : MonoBehaviour, ITireEventListener {
         {
             BaseMoveState.MoveControlType = UnitMoveControlType.LadderControl;
             BaseMoveState.CanUseLadder = false;
-            BaseMoveController.enabled = false;
-            LadderMoveController.enabled = true;
+            Destroy(GetComponent<BaseMoveController>());
+            gameObject.AddComponent<LadderMoveController>();
         }
     }
 }

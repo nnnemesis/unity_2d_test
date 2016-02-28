@@ -8,22 +8,19 @@ public class BaseMoveController : MonoBehaviour, ITireEventListener {
     private IEventTire EventTire;
     private Rigidbody2D Rigidbody;
 
-    void Awake()
+    void Start()
     {
         EventTire = GetComponent<IEventTire>();
         BaseState = GetComponent<BaseMoveState>();
         Rigidbody = GetComponent<Rigidbody2D>();
-    }
 
-    void OnEnable()
-    {
         Rigidbody.gravityScale = 1f;
         EventTire.AddEventListener(TireEventType.ControlEvent, this);
         EventTire.AddEventListener(TireEventType.ChangedMoveStateEvent, this);
         EventTire.AddEventListener(TireEventType.ChangedJumpStateEvent, this);
     }
 
-    void OnDisable()
+    void OnDestroy()
     {
         EventTire.RemoveEventListener(TireEventType.ControlEvent, this);
         EventTire.RemoveEventListener(TireEventType.ChangedMoveStateEvent, this);

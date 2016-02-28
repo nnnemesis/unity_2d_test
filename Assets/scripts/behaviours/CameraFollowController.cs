@@ -6,15 +6,12 @@ public class CameraFollowController : MonoBehaviour {
     private CameraFollowState State;
     private Transform PlayerTransform;
 
-    void Awake()
+    void Start()
     {
         State = GetComponent<CameraFollowState>();
-    }
-
-	void Start () {
         TryFindPlayer();
     }
-	
+
     void TryFindPlayer()
     {
         var player = GameObject.FindGameObjectWithTag("Player");

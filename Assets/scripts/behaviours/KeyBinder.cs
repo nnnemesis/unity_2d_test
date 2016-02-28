@@ -8,7 +8,7 @@ public class KeyBinder : MonoBehaviour {
 
     private IEventTire EventTire;
 
-    void Awake()
+    void Start()
     {
         EventTire = GetComponent<IEventTire>();
 
@@ -31,9 +31,7 @@ public class KeyBinder : MonoBehaviour {
 
         State[ControlAction.NextWeapon] = false;
         State[ControlAction.PrevWeapon] = false;
-    }
 
-    void Start () {
         EventTire.SendEvent(new ControlEvent() { Actions = State });
     }
 

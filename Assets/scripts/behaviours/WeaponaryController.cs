@@ -63,7 +63,7 @@ public class WeaponaryController : MonoBehaviour, ITireEventListener {
 
     void TrySelectPrevWeapon()
     {
-        Debug.Log("TrySelectPrevWeapon");
+        //Debug.Log("TrySelectPrevWeapon");
         var OwnedWeaponsCount = WeaponaryState.OwnedWeaponsCount;
         if (OwnedWeaponsCount == 1 && WeaponaryState.CurrentWeaponIndex < 0)
         {
@@ -77,7 +77,7 @@ public class WeaponaryController : MonoBehaviour, ITireEventListener {
 
     void TrySelectNextWeapon()
     {
-        Debug.Log("TrySelectNextWeapon");
+        //Debug.Log("TrySelectNextWeapon");
         var OwnedWeaponsCount = WeaponaryState.OwnedWeaponsCount;
         if (OwnedWeaponsCount == 1 && WeaponaryState.CurrentWeaponIndex < 0)
         {
@@ -111,7 +111,7 @@ public class WeaponaryController : MonoBehaviour, ITireEventListener {
 
     void SelectWeapon(int index)
     {
-        Debug.Log("SelectWeapon "+index);
+        //Debug.Log("SelectWeapon "+index);
         // destroing previous weapon
         if (CurrentWeapon != null)
         {
@@ -143,13 +143,5 @@ public class WeaponaryController : MonoBehaviour, ITireEventListener {
         }
         return PrefabIdentifier.None;
     }
-
-    //void Start() {
-    //    //GameObject testWeapon = (GameObject)Instantiate(InitWeapon, Vector3.zero, Quaternion.identity);
-    //    //SingleEventTireProxy proxy = testWeapon.AddComponent<SingleEventTireProxy>();
-    //    //proxy.Instance = EventTire;
-    //    //testWeapon.transform.SetParent(LeftHandTransform, false);
-    //    //WeaponaryState.CurrentWeapon = testWeapon;
-    //}
 	
 }
