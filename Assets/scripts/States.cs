@@ -96,6 +96,17 @@ public class ChangedCanUseLadder : TireEvent
     }
 }
 
+public class ChangedCanPickupAmmoEvent : TireEvent
+{
+    public ChangedCanPickupAmmoEvent() { Type = TireEventType.ChangedCanPickupAmmoEvent; }
+    public bool NewState;
+
+    public override string ToString()
+    {
+        return "Type " + Type + " NewState " + NewState;
+    }
+}
+
 public class ChangedCurrentWeapon : TireEvent
 {
     public ChangedCurrentWeapon() { Type = TireEventType.ChangedCurrentWeapon; }

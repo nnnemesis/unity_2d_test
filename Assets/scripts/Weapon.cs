@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public enum WeaponType
 {
@@ -17,6 +18,20 @@ public enum WeaponUseState
     Reload
 }
 
+[Serializable]
+public class AmmoPickup
+{
+    public WeaponType WeaponType = WeaponType.None;
+    public int AmmoCount = 0;
+
+    public override string ToString()
+    {
+        return "WeaponType " + WeaponType + " AmmoCount " + AmmoCount;
+    }
+
+}
+
+[Serializable]
 public class SavedWeaponState
 {
     public WeaponType WeaponType;
@@ -35,6 +50,18 @@ public class SavedWeaponState
             + " DamageAmount " + DamageAmount;
     }
 
+}
+
+public class AmmoPickupEvent : TireEvent
+{
+    public AmmoPickup AmmoPickup;
+
+    public AmmoPickupEvent() { Type = TireEventType.AmmoPickupEvent; }
+
+    public override string ToString()
+    {
+        return "Type " + Type + " AmmoPickup " + AmmoPickup;
+    }
 }
 
 public class WeaponCurrentTotalAmmoChangedEvent : TireEvent

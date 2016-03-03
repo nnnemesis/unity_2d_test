@@ -12,6 +12,7 @@ public class ReloadWeaponController : MonoBehaviour, ITireEventListener
         State = GetComponent<WeaponState>();
         EventTire = GetComponent<IEventTire>();
         EventTire.AddEventListener(TireEventType.ControlEvent, this);
+        EventTire.AddEventListener(TireEventType.AmmoPickupEvent, this);
     }
 
     public void OnTireEvent(TireEvent ev)
@@ -20,9 +21,24 @@ public class ReloadWeaponController : MonoBehaviour, ITireEventListener
         {
             OnControlEvent((ControlEvent)ev);
         }
+        else if (ev.Type == TireEventType.AmmoPickupEvent)
+        {
+            OnAmmoPickupEvent((AmmoPickupEvent)ev);
+        }
     }
 
-    private void OnControlEvent(ControlEvent e)
+    void OnAmmoPickupEvent(AmmoPickupEvent ev)
+    {
+        var ammoPickup = ev.AmmoPickup;
+        var weaponType = ammoPickup.WeaponType;
+        // if not current weapon
+        if (State.WeaponType == weaponType)
+        {
+            State.CurrentTotalAmmo = Mathf.Min(State.CurrentTotalAmmo + ammoPickup.AmmoCount, State.MaxTotalAmmo);
+        }
+    }
+
+    void OnControlEvent(ControlEvent e)
     {
         Dictionary<ControlAction, bool> actions = e.Actions;
         if (actions[ControlAction.Recharge])
@@ -31,7 +47,7 @@ public class ReloadWeaponController : MonoBehaviour, ITireEventListener
         }
     }
 
-    public void Recharge()
+    void Recharge()
     {
         if (State.UseState != WeaponUseState.Reload)
         {

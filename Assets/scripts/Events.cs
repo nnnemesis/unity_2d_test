@@ -18,7 +18,9 @@ public enum TireEventType
     ChangedUnitMoveControlType,
     ChangedCanUseLadder,
     SaveWeaponStateEvent,
-    LoadWeaponStateEvent
+    LoadWeaponStateEvent,
+    ChangedCanPickupAmmoEvent,
+    AmmoPickupEvent
 }
 
 public abstract class TireEvent
