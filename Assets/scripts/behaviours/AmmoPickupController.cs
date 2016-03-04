@@ -53,15 +53,18 @@ public class AmmoPickupController : MonoBehaviour, ITireEventListener {
         var ammoPickup = ev.AmmoPickup;
         var weaponType = ammoPickup.WeaponType;
         // if not current weapon
-        if (WeaponaryState.GetOwnedWeaponType(WeaponaryState.CurrentWeaponIndex) != weaponType)
+        if ((WeaponaryState.CurrentWeaponIndex < 0) 
+            || (WeaponaryState.GetOwnedWeaponType(WeaponaryState.CurrentWeaponIndex) != weaponType))
         {
-            SavedWeaponState savedWeaponState = WeaponaryState.LoadKnownWeapon(weaponType);
-            if (savedWeaponState == null)
+            var weaponData = WeaponaryState.LoadKnownWeapon(weaponType);
+            if (weaponData == null)
             {
-                savedWeaponState = WeaponConstants.Instance.GetSavedWeaponState(weaponType);
+                weaponData = new WeaponData();
+                WeaponCards.FillWithDefault(weaponType, weaponData);
             }
-            savedWeaponState.CurrentTotalAmmo = Mathf.Min(savedWeaponState.CurrentTotalAmmo + ammoPickup.AmmoCount, savedWeaponState.MaxTotalAmmo);
-            WeaponaryState.SaveKnownWeapon(weaponType, savedWeaponState);
+            weaponData.CurrentTotalAmmo = Mathf.Min(weaponData.CurrentTotalAmmo + ammoPickup.AmmoCount, weaponData.MaxTotalAmmo);
+            Debug.LogWarning("OnAmmoPickupEvent " + weaponData);
+            WeaponaryState.SaveKnownWeapon(weaponData);
         }
     }
 

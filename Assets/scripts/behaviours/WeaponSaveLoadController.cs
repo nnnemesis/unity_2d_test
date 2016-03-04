@@ -21,24 +21,26 @@ public class WeaponSaveLoadController : MonoBehaviour
 
     void LoadWeaponState()
     {
-        var ev = new LoadWeaponStateEvent() { SavedWeaponState = new SavedWeaponState() { WeaponType = WeaponState.WeaponType } };
+        var ev = new LoadWeaponStateEvent() { WeaponType = WeaponState.WeaponType };
         EventTire.SendEvent(ev);
-        var savedState = ev.SavedWeaponState;
-        if (savedState != null)
+        var weaponData = ev.WeaponData;
+        if (weaponData == null)
         {
-            WeaponState.CurrentMagazineAmmo = savedState.CurrentMagazineAmmo;
-            WeaponState.CurrentTotalAmmo = savedState.CurrentTotalAmmo;
-            WeaponState.OneUseTime = savedState.OneUseTime;
-            WeaponState.ReloadTime = savedState.ReloadTime;
-            WeaponState.MaxMagazineAmmo = savedState.MaxMagazineAmmo;
-            WeaponState.MaxTotalAmmo = savedState.MaxTotalAmmo;
-            WeaponState.DamageAmount = savedState.DamageAmount;
+            weaponData = new WeaponData();
+            WeaponCards.FillWithDefault(WeaponState.WeaponType, weaponData);
         }
+        WeaponState.CurrentMagazineAmmo = weaponData.CurrentMagazineAmmo;
+        WeaponState.CurrentTotalAmmo = weaponData.CurrentTotalAmmo;
+        WeaponState.OneUseTime = weaponData.OneUseTime;
+        WeaponState.ReloadTime = weaponData.ReloadTime;
+        WeaponState.MaxMagazineAmmo = weaponData.MaxMagazineAmmo;
+        WeaponState.MaxTotalAmmo = weaponData.MaxTotalAmmo;
+        WeaponState.DamageAmount = weaponData.DamageAmount;
     }
 
     void SaveWeaponState()
     {
-        var savedWeaponState = new SavedWeaponState() {
+        var weaponData = new WeaponData() {
             WeaponType = WeaponState.WeaponType
         , CurrentMagazineAmmo = WeaponState.CurrentMagazineAmmo
         , CurrentTotalAmmo = WeaponState.CurrentTotalAmmo
@@ -47,7 +49,7 @@ public class WeaponSaveLoadController : MonoBehaviour
         , MaxTotalAmmo = WeaponState.MaxTotalAmmo
         , OneUseTime = WeaponState.OneUseTime
         , ReloadTime = WeaponState.ReloadTime};
-        EventTire.SendEvent(new SaveWeaponStateEvent() { SavedWeaponState = savedWeaponState });
+        EventTire.SendEvent(new SaveWeaponStateEvent() { WeaponData = weaponData });
     }
 
 }

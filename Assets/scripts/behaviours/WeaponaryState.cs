@@ -29,19 +29,19 @@ public class WeaponaryState : MonoBehaviour
     }
 
     public List<WeaponType> OwnedWeapons = new List<WeaponType>();
-    private Dictionary<WeaponType, SavedWeaponState> KnownWeapons = new Dictionary<WeaponType, SavedWeaponState>();
+    private Dictionary<WeaponType, WeaponData> KnownWeapons = new Dictionary<WeaponType, WeaponData>();
 
     public int OwnedWeaponsCount
     {
         get { return OwnedWeapons.Count; }
     }
 
-    public void SaveKnownWeapon(WeaponType weaponType, SavedWeaponState savedWeaponState)
+    public void SaveKnownWeapon(WeaponData savedWeaponState)
     {
-        KnownWeapons[weaponType] = savedWeaponState;
+        KnownWeapons[savedWeaponState.WeaponType] = savedWeaponState;
     }
 
-    public SavedWeaponState LoadKnownWeapon(WeaponType weaponType)
+    public WeaponData LoadKnownWeapon(WeaponType weaponType)
     {
         if (KnownWeapons.ContainsKey(weaponType))
         {

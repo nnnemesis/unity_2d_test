@@ -32,16 +32,16 @@ public class AmmoPickup
 }
 
 [Serializable]
-public class SavedWeaponState
+public class WeaponData
 {
-    public WeaponType WeaponType;
+    public WeaponType WeaponType = WeaponType.None;
     public int CurrentMagazineAmmo = 0;
     public int CurrentTotalAmmo = 0;
     public int MaxTotalAmmo = 0;
     public int MaxMagazineAmmo = 0;
     public float ReloadTime = 0;
-    public float OneUseTime = 0.5f;
-    public float DamageAmount = 20f;
+    public float OneUseTime = 0f;
+    public float DamageAmount = 0f;
 
     public override string ToString()
     {
@@ -50,6 +50,18 @@ public class SavedWeaponState
             + " DamageAmount " + DamageAmount;
     }
 
+}
+
+[Serializable]
+public class CardWeapon
+{
+    public WeaponType WeaponType;
+    public int MaxTotalAmmo = 0;
+    public int MaxMagazineAmmo = 0;
+    public float ReloadTime = 0;
+    public float OneUseTime = 0.5f;
+    public float DamageAmount = 20f;
+    public Sprite Icon;
 }
 
 public class AmmoPickupEvent : TireEvent
@@ -112,7 +124,8 @@ public class WeaponUseStateChangedEvent : TireEvent
 
 public class LoadWeaponStateEvent : TireEvent
 {
-    public SavedWeaponState SavedWeaponState;
+    public WeaponType WeaponType;
+    public WeaponData WeaponData;
 
     public LoadWeaponStateEvent()
     {
@@ -121,13 +134,13 @@ public class LoadWeaponStateEvent : TireEvent
 
     public override string ToString()
     {
-        return "Type " + Type + " SavedWeaponState " + SavedWeaponState;
+        return "Type " + Type + " WeaponData " + WeaponData;
     }
 }
 
 public class SaveWeaponStateEvent : TireEvent
 {
-    public SavedWeaponState SavedWeaponState;
+    public WeaponData WeaponData;
 
     public SaveWeaponStateEvent()
     {
@@ -136,7 +149,7 @@ public class SaveWeaponStateEvent : TireEvent
 
     public override string ToString()
     {
-        return "Type " + Type + " SavedWeaponState " + SavedWeaponState;
+        return "Type " + Type + " WeaponData " + WeaponData;
     }
 
 }

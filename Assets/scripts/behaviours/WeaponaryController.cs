@@ -26,12 +26,12 @@ public class WeaponaryController : MonoBehaviour, ITireEventListener {
 
     void OnSaveWeaponStateEvent(SaveWeaponStateEvent ev)
     {
-        WeaponaryState.SaveKnownWeapon(ev.SavedWeaponState.WeaponType, ev.SavedWeaponState);
+        WeaponaryState.SaveKnownWeapon(ev.WeaponData);
     }
 
     void OnLoadWeaponStateEvent(LoadWeaponStateEvent ev)
     {
-        ev.SavedWeaponState = WeaponaryState.LoadKnownWeapon(ev.SavedWeaponState.WeaponType);
+        ev.WeaponData = WeaponaryState.LoadKnownWeapon(ev.WeaponType);
     }
 
     void OnControlEvent(ControlEvent e)
