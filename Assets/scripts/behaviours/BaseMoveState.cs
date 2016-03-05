@@ -4,12 +4,12 @@ using System.Collections;
 public class BaseMoveState : MonoBehaviour
 {
     private IEventTire EventTire;
-    public float CurrentMoveForse = 0;
-    public float CurrentVerticalMoveForse = 0;
     public float WalkMoveForse = 5;
     public float JumpForse = 200;
     public float ShiftWalkMoveForse = 10;
     public Vector2 GroundCheckVector = Vector2.up * -0.1f;
+    public Vector2 HorizontalMoveForce = Vector2.zero;
+    public Vector2 VerticalMoveForce = Vector2.zero;
 
     private bool _CanUseLadder = false;
     public bool CanUseLadder
@@ -53,7 +53,7 @@ public class BaseMoveState : MonoBehaviour
         }
     }
 
-    private MoveState _MoveState = MoveState.Idle;    // default is idle
+    private MoveState _MoveState = MoveState.Idle;
     public MoveState MoveState
     {
         get
@@ -65,7 +65,7 @@ public class BaseMoveState : MonoBehaviour
             if(_MoveState != value)
             {
                 _MoveState = value;
-                EventTire.SendEvent(new ChangedMoveStateEvent() { NewState = value });
+                EventTire.SendEvent(new ChangedMoveStateEvent() { NewState = value, ShiftWalk = ShiftWalk });
             }
         }
     }
@@ -80,6 +80,20 @@ public class BaseMoveState : MonoBehaviour
             {
                 _VerticalMoveState = value;
                 EventTire.SendEvent(new ChangedVerticalMoveStateEvent() { NewState = value });
+            }
+        }
+    }
+
+    private bool _ShiftWalk = false;
+    public bool ShiftWalk
+    {
+        get { return _ShiftWalk; }
+        set
+        {
+            if(value != _ShiftWalk)
+            {
+                _ShiftWalk = value;
+                EventTire.SendEvent(new ChangedShiftWalkEvent() { NewState = value });
             }
         }
     }

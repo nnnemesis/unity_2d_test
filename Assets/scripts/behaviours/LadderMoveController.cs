@@ -18,6 +18,7 @@ public class LadderMoveController : MonoBehaviour, ITireEventListener {
 
         EventTire.AddEventListener(TireEventType.ControlEvent, this);
         EventTire.AddEventListener(TireEventType.ChangedMoveStateEvent, this);
+        EventTire.AddEventListener(TireEventType.ChangedVerticalMoveStateEvent, this);
         EventTire.AddEventListener(TireEventType.ChangedJumpStateEvent, this);
         Rigidbody.gravityScale = 0f;
     }
@@ -26,23 +27,22 @@ public class LadderMoveController : MonoBehaviour, ITireEventListener {
     {
         EventTire.RemoveEventListener(TireEventType.ControlEvent, this);
         EventTire.RemoveEventListener(TireEventType.ChangedMoveStateEvent, this);
+        EventTire.RemoveEventListener(TireEventType.ChangedVerticalMoveStateEvent, this);
         EventTire.RemoveEventListener(TireEventType.ChangedJumpStateEvent, this);
     }
 
     void FixedUpdate()
     {
-        if (BaseState.MoveState == MoveState.Walk)
+        var horizontalMoveForce = BaseState.HorizontalMoveForce;
+        if (horizontalMoveForce != Vector2.zero)
         {
-            Rigidbody.AddForce(Vector2.right * BaseState.WalkMoveForse * BaseState.Direction);
+            Rigidbody.AddForce(horizontalMoveForce);
         }
 
-        if(BaseState.VerticalMoveState == VerticalMoveState.Up)
+        var verticalMoveForce = BaseState.VerticalMoveForce;
+        if(verticalMoveForce != Vector2.zero)
         {
-            Rigidbody.AddForce(Vector2.up * BaseState.WalkMoveForse);
-        }
-        else if (BaseState.VerticalMoveState == VerticalMoveState.Down)
-        {
-            Rigidbody.AddForce(Vector2.down * BaseState.WalkMoveForse);
+            Rigidbody.AddForce(verticalMoveForce);
         }
     }
 
@@ -52,9 +52,49 @@ public class LadderMoveController : MonoBehaviour, ITireEventListener {
         {
             OnControlEvent((ControlEvent)ev);
         }
+        else if (ev.Type == TireEventType.ChangedMoveStateEvent)
+        {
+            UpdateHorizontalMoveState();
+        }
+        else if (ev.Type == TireEventType.ChangedVerticalMoveStateEvent)
+        {
+            UpdateVerticalMoveState();
+        }
         else if (ev.Type == TireEventType.ChangedJumpStateEvent)
         {
             OnPlayerChangedJumpStateEvent((ChangedJumpStateEvent)ev);
+        }
+    }
+
+    void UpdateVerticalMoveState()
+    {
+        if (BaseState.VerticalMoveState == VerticalMoveState.Up)
+        {
+            BaseState.VerticalMoveForce = Vector2.up * BaseState.WalkMoveForse;
+        }
+        else if (BaseState.VerticalMoveState == VerticalMoveState.Down)
+        {
+            BaseState.VerticalMoveForce = Vector2.down * BaseState.WalkMoveForse;
+        }
+        else if (BaseState.VerticalMoveState == VerticalMoveState.Idle)
+        {
+            BaseState.VerticalMoveForce = Vector2.zero;
+        }
+    }
+
+    void UpdateHorizontalMoveState()
+    {
+        if (BaseState.MoveState == MoveState.Left)
+        {
+            BaseState.HorizontalMoveForce = BaseState.WalkMoveForse * Vector2.left;
+        }
+        else if (BaseState.MoveState == MoveState.Right)
+        {
+            BaseState.HorizontalMoveForce = BaseState.WalkMoveForse * Vector2.right;
+        }
+        else if (BaseState.MoveState == MoveState.Idle)
+        {
+            BaseState.HorizontalMoveForce = Vector2.zero;
         }
     }
 
@@ -63,19 +103,11 @@ public class LadderMoveController : MonoBehaviour, ITireEventListener {
         Dictionary<ControlAction, bool> actions = e.Actions;
         if (actions[ControlAction.WalkForward])
         {
-            BaseState.Direction = 1;
-            var rotation = transform.rotation;
-            rotation.SetLookRotation(Vector3.forward);
-            transform.rotation = rotation;
-            BaseState.MoveState = MoveState.Walk;
+            BaseState.MoveState = MoveState.Right;
         }
         else if (actions[ControlAction.WalkBack])
         {
-            BaseState.Direction = -1;
-            var rotation = transform.rotation;
-            rotation.SetLookRotation(Vector3.back);
-            transform.rotation = rotation;
-            BaseState.MoveState = MoveState.Walk;
+            BaseState.MoveState = MoveState.Left;
         }
         else
         {

@@ -17,6 +17,7 @@ public class BaseMoveController : MonoBehaviour, ITireEventListener {
         Rigidbody.gravityScale = 1f;
         EventTire.AddEventListener(TireEventType.ControlEvent, this);
         EventTire.AddEventListener(TireEventType.ChangedMoveStateEvent, this);
+        EventTire.AddEventListener(TireEventType.ChangedShiftWalkEvent, this);
         EventTire.AddEventListener(TireEventType.ChangedJumpStateEvent, this);
     }
 
@@ -24,6 +25,7 @@ public class BaseMoveController : MonoBehaviour, ITireEventListener {
     {
         EventTire.RemoveEventListener(TireEventType.ControlEvent, this);
         EventTire.RemoveEventListener(TireEventType.ChangedMoveStateEvent, this);
+        EventTire.RemoveEventListener(TireEventType.ChangedShiftWalkEvent, this);
         EventTire.RemoveEventListener(TireEventType.ChangedJumpStateEvent, this);
     }
 
@@ -45,14 +47,13 @@ public class BaseMoveController : MonoBehaviour, ITireEventListener {
                     BaseState.JumpState = JumpState.Grounded;
                 }
             }
-        }                    
-
-        if (BaseState.MoveState == MoveState.Walk || BaseState.MoveState == MoveState.ShiftWalk)
-        {
-            var moveForse = Vector2.right * BaseState.CurrentMoveForse * BaseState.Direction;
-            Rigidbody.AddForce(moveForse);
         }
-            
+
+        var horizontalMoveForce = BaseState.HorizontalMoveForce;
+        if (horizontalMoveForce != Vector2.zero)
+        {
+            Rigidbody.AddForce(horizontalMoveForce);
+        }
     }
 
     public void OnTireEvent(TireEvent ev)
@@ -63,7 +64,11 @@ public class BaseMoveController : MonoBehaviour, ITireEventListener {
         }
         else if(ev.Type == TireEventType.ChangedMoveStateEvent)
         {
-            OnPlayerChangedMoveStateEvent((ChangedMoveStateEvent)ev);
+            UpdateHorizontalMoveState();
+        }
+        else if (ev.Type == TireEventType.ChangedShiftWalkEvent)
+        {
+            UpdateHorizontalMoveState();
         }
         else if (ev.Type == TireEventType.ChangedJumpStateEvent)
         {
@@ -71,14 +76,34 @@ public class BaseMoveController : MonoBehaviour, ITireEventListener {
         }
     }
 
-    private void OnPlayerChangedMoveStateEvent(ChangedMoveStateEvent e)
+    void UpdateHorizontalMoveState()
     {
-        if (BaseState.MoveState == MoveState.Walk)
-            BaseState.CurrentMoveForse = BaseState.WalkMoveForse;
-        else if (BaseState.MoveState == MoveState.ShiftWalk)
-            BaseState.CurrentMoveForse = BaseState.ShiftWalkMoveForse;
+        if (BaseState.MoveState == MoveState.Left)
+        {
+            if (BaseState.ShiftWalk)
+            {
+                BaseState.HorizontalMoveForce = BaseState.ShiftWalkMoveForse * Vector2.left;
+            }
+            else
+            {
+                BaseState.HorizontalMoveForce = BaseState.WalkMoveForse * Vector2.left;
+            }
+        }
+        else if (BaseState.MoveState == MoveState.Right)
+        {
+            if (BaseState.ShiftWalk)
+            {
+                BaseState.HorizontalMoveForce = BaseState.ShiftWalkMoveForse * Vector2.right;
+            }
+            else
+            {
+                BaseState.HorizontalMoveForce = BaseState.WalkMoveForse * Vector2.right;
+            }
+        }
         else if (BaseState.MoveState == MoveState.Idle)
-            BaseState.CurrentMoveForse = 0f;
+        {
+            BaseState.HorizontalMoveForce = Vector2.zero;
+        }
     }
 
     private void OnPlayerChangedJumpStateEvent(ChangedJumpStateEvent e)
@@ -92,35 +117,29 @@ public class BaseMoveController : MonoBehaviour, ITireEventListener {
     private void OnControlEvent(ControlEvent e)
     {
         Dictionary<ControlAction, bool> actions = e.Actions;
-        if (actions[ControlAction.WalkForward])
+        if(actions[ControlAction.WalkForward] || actions[ControlAction.WalkBack])
         {
-            BaseState.Direction = 1;
-            var rotation = transform.rotation;
-            rotation.SetLookRotation(Vector3.forward);
-            transform.rotation = rotation;
             if (actions[ControlAction.Shift])
             {
-                BaseState.MoveState = MoveState.ShiftWalk;
+                BaseState.ShiftWalk = true;
             }
             else
             {
-                BaseState.MoveState = MoveState.Walk;
+                BaseState.ShiftWalk = false;
             }
+        }
+        else
+        {
+            BaseState.ShiftWalk = false;
+        }
+
+        if (actions[ControlAction.WalkForward])
+        {
+            BaseState.MoveState = MoveState.Right;
         }
         else if (actions[ControlAction.WalkBack])
         {
-            BaseState.Direction = -1;
-            var rotation = transform.rotation;
-            rotation.SetLookRotation(Vector3.back);
-            transform.rotation = rotation;
-            if (actions[ControlAction.Shift])
-            {
-                BaseState.MoveState = MoveState.ShiftWalk;
-            }
-            else
-            {
-                BaseState.MoveState = MoveState.Walk;
-            }
+            BaseState.MoveState = MoveState.Left;
         }
         else
         {

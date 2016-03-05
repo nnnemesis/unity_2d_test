@@ -4,8 +4,8 @@ using System.Collections;
 // Horizontal State
 public enum MoveState
 {
-    Walk,
-    ShiftWalk,
+    Right,
+    Left,
     Idle
 }
 
@@ -27,6 +27,17 @@ public enum AttackState
 {
     Idle,
     MainAttack
+}
+
+public class ChangedShiftWalkEvent : TireEvent
+{
+    public ChangedShiftWalkEvent() { Type = TireEventType.ChangedShiftWalkEvent; }
+    public bool NewState;
+
+    public override string ToString()
+    {
+        return "Type " + Type + " NewState " + NewState;
+    }
 }
 
 public class ChangedDirectionEvent : TireEvent
@@ -55,10 +66,11 @@ public class ChangedMoveStateEvent : TireEvent
 {
     public ChangedMoveStateEvent() { Type = TireEventType.ChangedMoveStateEvent; }
     public MoveState NewState;
+    public bool ShiftWalk = false;
 
     public override string ToString()
     {
-        return "Type " + Type + " MoveState " + NewState;
+        return "Type " + Type + " MoveState " + NewState + " ShiftWalk " + ShiftWalk;
     }
 }
 

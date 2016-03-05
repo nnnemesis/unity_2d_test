@@ -28,31 +28,37 @@ public class BaseMoveAnimationController : MonoBehaviour, ITireEventListener {
 
     private void OnPlayerChangedMoveStateEvent(ChangedMoveStateEvent e)
     {
-        if (e.NewState == MoveState.Idle)
+        var newState = e.NewState;
+        if (newState == MoveState.Idle)
         {
             Animator.SetTrigger("MoveIdle");
         }
-        else if (e.NewState == MoveState.Walk)
+        else if (newState == MoveState.Left || newState == MoveState.Right)
         {
-            Animator.SetTrigger("MoveWalk");
-        }
-        else if(e.NewState == MoveState.ShiftWalk)
-        {
-            Animator.SetTrigger("MoveShiftWalk");
+            if (e.ShiftWalk)
+            {
+                Animator.SetTrigger("MoveShiftWalk");
+            }
+            else
+            {
+                Animator.SetTrigger("MoveWalk");
+            }
+            
         }
     }
 
     private void OnPlayerChangedJumpStateEvent(ChangedJumpStateEvent e)
     {
-        if (e.NewState == JumpState.Jump)
+        var newState = e.NewState;
+        if (newState == JumpState.Jump)
         {
             Animator.SetTrigger("Jump");
         }
-        else if(e.NewState == JumpState.Fall)
+        else if(newState == JumpState.Fall)
         {
             Animator.SetTrigger("Fall");
         }
-        else if(e.NewState == JumpState.Grounded)
+        else if(newState == JumpState.Grounded)
         {
             Animator.SetTrigger("Grounded");
         }

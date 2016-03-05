@@ -63,7 +63,6 @@ public class AmmoPickupController : MonoBehaviour, ITireEventListener {
                 WeaponCards.FillWithDefault(weaponType, weaponData);
             }
             weaponData.CurrentTotalAmmo = Mathf.Min(weaponData.CurrentTotalAmmo + ammoPickup.AmmoCount, weaponData.MaxTotalAmmo);
-            Debug.LogWarning("OnAmmoPickupEvent " + weaponData);
             WeaponaryState.SaveKnownWeapon(weaponData);
         }
     }
