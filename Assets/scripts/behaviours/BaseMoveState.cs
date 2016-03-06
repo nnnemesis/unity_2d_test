@@ -116,6 +116,20 @@ public class BaseMoveState : MonoBehaviour
 
     }
 
+    private bool _SitDown = false;
+    public bool SitDown
+    {
+        get { return _SitDown; }
+        set
+        {
+            if(_SitDown != value)
+            {
+                _SitDown = value;
+                EventTire.SendEvent(new ChangedSitDownEvent() { NewState = value });
+            }
+        }
+    }
+
     void Start()
     {
         EventTire = GetComponent<IEventTire>();

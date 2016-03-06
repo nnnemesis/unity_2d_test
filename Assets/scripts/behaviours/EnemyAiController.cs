@@ -25,6 +25,7 @@ public class EnemyAiController : MonoBehaviour
         Actions.Add(ControlAction.Recharge, false);
         Actions.Add(ControlAction.NextWeapon, false);
         Actions.Add(ControlAction.PrevWeapon, false);
+        Actions.Add(ControlAction.SitDown, false);
     }
 
     void FixedUpdate()

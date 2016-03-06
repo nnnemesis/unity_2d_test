@@ -14,6 +14,7 @@ public enum ControlAction
     Recharge,
     NextWeapon,
     PrevWeapon,
+    SitDown,
 }
 
 public class ControlEvent : TireEvent

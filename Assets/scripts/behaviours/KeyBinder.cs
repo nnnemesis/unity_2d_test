@@ -21,6 +21,8 @@ public class KeyBinder : MonoBehaviour {
         KeyMap.Add(KeyCode.W, ControlAction.WalkUp);
         KeyMap.Add(KeyCode.S, ControlAction.WalkDown);
         KeyMap.Add(KeyCode.R, ControlAction.Recharge);
+        KeyMap.Add(KeyCode.LeftControl, ControlAction.SitDown);
+        KeyMap.Add(KeyCode.RightControl, ControlAction.SitDown);
 
         KeyMap.Add(KeyCode.Mouse0, ControlAction.MainAttack);
 

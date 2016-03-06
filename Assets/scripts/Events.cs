@@ -22,6 +22,7 @@ public enum TireEventType
     ChangedCanPickupAmmoEvent,
     AmmoPickupEvent,
     ChangedShiftWalkEvent,
+    ChangedSitDownEvent,
 }
 
 public abstract class TireEvent

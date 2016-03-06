@@ -117,7 +117,7 @@ public class BaseMoveController : MonoBehaviour, ITireEventListener {
     private void OnControlEvent(ControlEvent e)
     {
         Dictionary<ControlAction, bool> actions = e.Actions;
-        if(actions[ControlAction.WalkForward] || actions[ControlAction.WalkBack])
+        if(!actions[ControlAction.SitDown] && (actions[ControlAction.WalkForward] || actions[ControlAction.WalkBack]))
         {
             if (actions[ControlAction.Shift])
             {

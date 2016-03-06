@@ -40,6 +40,17 @@ public class ChangedShiftWalkEvent : TireEvent
     }
 }
 
+public class ChangedSitDownEvent : TireEvent
+{
+    public ChangedSitDownEvent() { Type = TireEventType.ChangedSitDownEvent; }
+    public bool NewState;
+
+    public override string ToString()
+    {
+        return "Type " + Type + " NewState " + NewState;
+    }
+}
+
 public class ChangedDirectionEvent : TireEvent
 {
     public ChangedDirectionEvent() { Type = TireEventType.ChangedDirectionEvent; }
