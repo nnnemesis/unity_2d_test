@@ -5,7 +5,7 @@ public class BaseLifeState : MonoBehaviour
 {
     private IEventTire EventTire;
 
-    private float _Health = 100f;
+    public float _Health = 100f;
     public float Health
     {
         get

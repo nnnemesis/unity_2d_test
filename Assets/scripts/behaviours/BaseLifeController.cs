@@ -13,6 +13,15 @@ public class BaseLifeController : MonoBehaviour, IDamageble
     public void InflictDamage(DamageType Type, float Amount)
     {
         BaseLifeState.Health -= Amount;
+        if(BaseLifeState.Health <= 0)
+        {
+            DestroyOnHealthEnd();
+        }
+    }
+
+    void DestroyOnHealthEnd()
+    {
+        Destroy(gameObject);
     }
 
 }

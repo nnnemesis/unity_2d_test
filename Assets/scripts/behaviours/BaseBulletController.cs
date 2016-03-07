@@ -14,8 +14,9 @@ public class BaseBulletController : MonoBehaviour
         if (damagable != null)
         {
             damagable.InflictDamage(DamageType.Bullet, DamageAmount);
+            DestroyOnHit();
         }
-        if (!other.isTrigger)
+        else if (!other.isTrigger)
         {
             DestroyOnHit();
         }
