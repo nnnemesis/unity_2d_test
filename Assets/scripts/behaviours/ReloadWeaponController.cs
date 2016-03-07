@@ -15,6 +15,12 @@ public class ReloadWeaponController : MonoBehaviour, ITireEventListener
         EventTire.AddEventListener(TireEventType.AmmoPickupEvent, this);
     }
 
+    void OnDestroy()
+    {
+        EventTire.RemoveEventListener(TireEventType.ControlEvent, this);
+        EventTire.RemoveEventListener(TireEventType.AmmoPickupEvent, this);
+    }
+
     public void OnTireEvent(TireEvent ev)
     {
         if (ev.Type == TireEventType.ControlEvent)

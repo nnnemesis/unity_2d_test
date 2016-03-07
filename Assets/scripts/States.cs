@@ -119,6 +119,17 @@ public class ChangedCanUseLadder : TireEvent
     }
 }
 
+public class ChangedCanPickupWeaponEvent : TireEvent
+{
+    public ChangedCanPickupWeaponEvent() { Type = TireEventType.ChangedCanPickupWeaponEvent; }
+    public bool NewState;
+
+    public override string ToString()
+    {
+        return "Type " + Type + " NewState " + NewState;
+    }
+}
+
 public class ChangedCanPickupAmmoEvent : TireEvent
 {
     public ChangedCanPickupAmmoEvent() { Type = TireEventType.ChangedCanPickupAmmoEvent; }
@@ -127,6 +138,18 @@ public class ChangedCanPickupAmmoEvent : TireEvent
     public override string ToString()
     {
         return "Type " + Type + " NewState " + NewState;
+    }
+}
+
+public class ReplacedCurrentWeaponEvent : TireEvent
+{
+    public ReplacedCurrentWeaponEvent() { Type = TireEventType.ReplacedCurrentWeaponEvent; }
+    public int Index = -1;
+    public WeaponType WeaponType = WeaponType.None;
+
+    public override string ToString()
+    {
+        return "Type " + Type + " Index " + Index + " WeaponType " + WeaponType;
     }
 }
 

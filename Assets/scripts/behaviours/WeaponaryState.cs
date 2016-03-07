@@ -31,9 +31,29 @@ public class WeaponaryState : MonoBehaviour
     public List<WeaponType> OwnedWeapons = new List<WeaponType>();
     private Dictionary<WeaponType, WeaponData> KnownWeapons = new Dictionary<WeaponType, WeaponData>();
 
-    public int OwnedWeaponsCount
+    public int WeaponarySize
     {
         get { return OwnedWeapons.Count; }
+    }
+
+    public int GetFirstOwnedWeaponIndex(int beginIndex)
+    {
+        for (int i = beginIndex; i < OwnedWeapons.Count; i += 1)
+        {
+            if (OwnedWeapons[i] != WeaponType.None)
+                return i;
+        }
+        return -1;
+    }
+
+    public int GetLastOwnedWeaponIndex(int beginIndex)
+    {
+        for (int i = beginIndex; i >= 0; i -= 1)
+        {
+            if (OwnedWeapons[i] != WeaponType.None)
+                return i;
+        }
+        return -1;
     }
 
     public void SaveKnownWeapon(WeaponData savedWeaponState)
@@ -58,9 +78,21 @@ public class WeaponaryState : MonoBehaviour
         return OwnedWeapons[index];
     }
 
+    public void SetOwnedWeaponType(int index, WeaponType WeaponType)
+    {
+        Debug.LogWarning("index " + index + " WeaponType " + WeaponType);
+        OwnedWeapons[index] = WeaponType;
+        EventTire.SendEvent(new ReplacedCurrentWeaponEvent() { Index = index, WeaponType = WeaponType });
+    }
+
     void Start()
     {
         EventTire = GetComponent<IEventTire>();
+        OwnedWeapons.Add(WeaponType.None);
+        OwnedWeapons.Add(WeaponType.None);
+        OwnedWeapons.Add(WeaponType.None);
+        OwnedWeapons.Add(WeaponType.None);
+        OwnedWeapons.Add(WeaponType.None);
     }
 
 }

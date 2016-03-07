@@ -22,6 +22,10 @@ public class WeaponaryController : MonoBehaviour, ITireEventListener {
         {
             OnControlEvent((ControlEvent)ev);
         }
+        else if(ev.Type == TireEventType.WeaponPickupEvent)
+        {
+            OnWeaponPickupEvent((WeaponPickupEvent)ev);
+        }
     }
 
     void OnSaveWeaponStateEvent(SaveWeaponStateEvent ev)
@@ -47,12 +51,33 @@ public class WeaponaryController : MonoBehaviour, ITireEventListener {
         }
     }
 
+    void OnWeaponPickupEvent(WeaponPickupEvent ev)
+    {
+        var pickup = ev.WeaponPickup;
+        var weaponType = pickup.WeaponType;
+        var currentWeaponIndex = WeaponaryState.CurrentWeaponIndex;
+        // if not current weapon
+        if (currentWeaponIndex >= 0 && WeaponaryState.GetOwnedWeaponType(currentWeaponIndex) == weaponType)
+        {
+            return; // same weapon
+        }
+        else if(currentWeaponIndex < 0) // no current weapon
+        {
+            ReplaceWeapon(0, weaponType);
+        }
+        else
+        {
+            ReplaceWeapon(currentWeaponIndex, weaponType);
+        }
+    }
+
     void Start()
     {
         EventTire = GetComponent<IEventTire>();
         EventTire.AddEventListener(TireEventType.ControlEvent, this);
         EventTire.AddEventListener(TireEventType.SaveWeaponStateEvent, this);
         EventTire.AddEventListener(TireEventType.LoadWeaponStateEvent, this);
+        EventTire.AddEventListener(TireEventType.WeaponPickupEvent, this);
 
         WeaponaryState = GetComponent<WeaponaryState>();
         if(WeaponaryState.CurrentWeaponIndex >= 0)
@@ -61,42 +86,64 @@ public class WeaponaryController : MonoBehaviour, ITireEventListener {
         }
     }
 
+    void OnDestroy()
+    {
+        EventTire.RemoveEventListener(TireEventType.ControlEvent, this);
+        EventTire.RemoveEventListener(TireEventType.SaveWeaponStateEvent, this);
+        EventTire.RemoveEventListener(TireEventType.LoadWeaponStateEvent, this);
+        EventTire.RemoveEventListener(TireEventType.WeaponPickupEvent, this);
+    }
+
     void TrySelectPrevWeapon()
     {
         //Debug.Log("TrySelectPrevWeapon");
-        var OwnedWeaponsCount = WeaponaryState.OwnedWeaponsCount;
-        if (OwnedWeaponsCount == 1 && WeaponaryState.CurrentWeaponIndex < 0)
+        if (WeaponaryState.CurrentWeaponIndex < 0)
         {
-            SelectWeapon(0);    
+            int index = WeaponaryState.GetFirstOwnedWeaponIndex(0);
+            if(index >= 0)
+            {
+                SelectWeapon(0);
+            }
         }
-        else if(OwnedWeaponsCount > 1)
+        else
         {
-            SelectWeapon(PrevWeaponIndex());
+            int index = PrevWeaponIndex();
+            if(index >= 0)
+            {
+                SelectWeapon(index);
+            }
         }
     }
 
     void TrySelectNextWeapon()
     {
         //Debug.Log("TrySelectNextWeapon");
-        var OwnedWeaponsCount = WeaponaryState.OwnedWeaponsCount;
-        if (OwnedWeaponsCount == 1 && WeaponaryState.CurrentWeaponIndex < 0)
+        if (WeaponaryState.CurrentWeaponIndex < 0)
         {
-            SelectWeapon(0);
+            int index = WeaponaryState.GetFirstOwnedWeaponIndex(0);
+            if (index >= 0)
+            {
+                SelectWeapon(0);
+            }
         }
-        else if (OwnedWeaponsCount > 1)
+        else
         {
-            SelectWeapon(NextWeaponIndex());
+            int index = NextWeaponIndex();
+            if (index >= 0)
+            {
+                SelectWeapon(index);
+            }
         }
     }
 
     int NextWeaponIndex()
     {
         int next = WeaponaryState.CurrentWeaponIndex + 1;
-        if (next >= WeaponaryState.OwnedWeaponsCount)
+        if (next >= WeaponaryState.WeaponarySize)
         {
             next = 0;
         }
-        return next;
+        return WeaponaryState.GetFirstOwnedWeaponIndex(next);
     }
 
     int PrevWeaponIndex()
@@ -104,9 +151,9 @@ public class WeaponaryController : MonoBehaviour, ITireEventListener {
         int next = WeaponaryState.CurrentWeaponIndex - 1;
         if (next < 0 )
         {
-            next = WeaponaryState.OwnedWeaponsCount - 1;
+            next = WeaponaryState.WeaponarySize - 1;
         }
-        return next;
+        return WeaponaryState.GetLastOwnedWeaponIndex(next);
     }
 
     void SelectWeapon(int index)
@@ -126,6 +173,18 @@ public class WeaponaryController : MonoBehaviour, ITireEventListener {
         weapon.transform.SetParent(LeftHandTransform, false);
         CurrentWeapon = weapon;
         WeaponaryState.CurrentWeaponIndex = index;
+    }
+
+    void ReplaceWeapon(int index, WeaponType NewWeaponType)
+    {
+        // destroing previous weapon
+        if (CurrentWeapon != null)
+        {
+            Destroy(CurrentWeapon);
+        }
+        // loading new weapon
+        WeaponaryState.SetOwnedWeaponType(index, NewWeaponType);
+        SelectWeapon(index);
     }
 
     PrefabIdentifier GetPrefabIdentifier(WeaponType weaponType)

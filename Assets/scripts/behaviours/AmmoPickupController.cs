@@ -38,10 +38,10 @@ public class AmmoPickupController : MonoBehaviour, ITireEventListener {
         Dictionary<ControlAction, bool> actions = e.Actions;
         if (CanPickupWeapon && AmmoPickup != null && actions[ControlAction.Use])
         {
-            var pickup = AmmoPickup.GetComponent<AmmoPickupProxy>();
+            var pickup = AmmoPickup.GetComponent<AmmoPickup>();
             if(pickup != null)
             {
-                EventTire.SendEvent(new AmmoPickupEvent() { AmmoPickup = pickup.AmmoPickup });
+                EventTire.SendEvent(new AmmoPickupEvent() { AmmoPickup = pickup });
                 Destroy(AmmoPickup);
                 AmmoPickup = null;
             }
@@ -78,7 +78,7 @@ public class AmmoPickupController : MonoBehaviour, ITireEventListener {
     void OnTriggerEnter2D(Collider2D other)
     {
         //Debug.LogWarning("OnTriggerEnter");
-        if (other.CompareTag("AmmoPickup"))
+        if (other.GetComponent<AmmoPickup>())
         {
             AmmoPickup = other.gameObject;
             CanPickupWeapon = true;
@@ -88,7 +88,7 @@ public class AmmoPickupController : MonoBehaviour, ITireEventListener {
     void OnTriggerExit2D(Collider2D other)
     {
         //Debug.LogWarning("OnTriggerEnter");
-        if (other.CompareTag("AmmoPickup"))
+        if (other.GetComponent<AmmoPickup>())
         {
             AmmoPickup = null;
             CanPickupWeapon = false;

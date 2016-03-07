@@ -10,10 +10,13 @@ public class BaseBulletController : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         //Debug.LogWarning("OnTriggerEnter");
-        var damagable = other.gameObject.GetComponent<IDamageble>();
+        var damagable = other.GetComponent<IDamageble>();
         if (damagable != null)
         {
             damagable.InflictDamage(DamageType.Bullet, DamageAmount);
+        }
+        if (!other.isTrigger)
+        {
             DestroyOnHit();
         }
     }

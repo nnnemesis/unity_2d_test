@@ -19,19 +19,6 @@ public enum WeaponUseState
 }
 
 [Serializable]
-public class AmmoPickup
-{
-    public WeaponType WeaponType = WeaponType.None;
-    public int AmmoCount = 0;
-
-    public override string ToString()
-    {
-        return "WeaponType " + WeaponType + " AmmoCount " + AmmoCount;
-    }
-
-}
-
-[Serializable]
 public class WeaponData
 {
     public WeaponType WeaponType = WeaponType.None;
@@ -62,6 +49,18 @@ public class CardWeapon
     public float OneUseTime = 0.5f;
     public float DamageAmount = 20f;
     public Sprite Icon;
+}
+
+public class WeaponPickupEvent : TireEvent
+{
+    public WeaponPickup WeaponPickup;
+
+    public WeaponPickupEvent() { Type = TireEventType.WeaponPickupEvent; }
+
+    public override string ToString()
+    {
+        return "Type " + Type + " WeaponPickup " + WeaponPickup;
+    }
 }
 
 public class AmmoPickupEvent : TireEvent

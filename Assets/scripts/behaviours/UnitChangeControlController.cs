@@ -24,7 +24,7 @@ public class UnitChangeControlController : MonoBehaviour, ITireEventListener {
     void OnTriggerEnter2D(Collider2D other)
     {
         //Debug.LogWarning("OnTriggerEnter");
-        if (other.CompareTag("Ladder") && BaseMoveState.MoveControlType != UnitMoveControlType.LadderControl)
+        if (other.GetComponent<Ladder>() && BaseMoveState.MoveControlType != UnitMoveControlType.LadderControl)
         {
             BaseMoveState.CanUseLadder = true;
         }
@@ -33,7 +33,7 @@ public class UnitChangeControlController : MonoBehaviour, ITireEventListener {
     void OnTriggerExit2D(Collider2D other)
     {
         //Debug.LogWarning("OnTriggerEnter");
-        if (other.CompareTag("Ladder") && BaseMoveState.MoveControlType == UnitMoveControlType.LadderControl)
+        if (other.GetComponent<Ladder>() && BaseMoveState.MoveControlType == UnitMoveControlType.LadderControl)
         {
             BaseMoveState.MoveControlType = UnitMoveControlType.GroundControl;
             BaseMoveState.CanUseLadder = false;

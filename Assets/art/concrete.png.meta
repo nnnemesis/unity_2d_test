@@ -1,0 +1,181 @@
+fileFormatVersion: 2
+guid: 031ff41429ab3a1478abf1fe1454473e
+timeCreated: 1457253692
+licenseType: Pro
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: concrete_0
+    21300002: concrete_1
+    21300004: concrete_2
+    21300006: concrete_3
+    21300008: concrete_4
+    21300010: concrete_5
+    21300012: concrete_6
+    21300014: concrete_7
+    21300016: concrete_8
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: concrete_0
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 485
+        width: 38
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 4, y: 4, z: 4, w: 4}
+      outline: []
+    - name: concrete_1
+      rect:
+        serializedVersion: 2
+        x: 55
+        y: 485
+        width: 77
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 4, y: 4, z: 4, w: 4}
+      outline: []
+    - name: concrete_2
+      rect:
+        serializedVersion: 2
+        x: 145
+        y: 485
+        width: 116
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 4, y: 4, z: 4, w: 4}
+      outline: []
+    - name: concrete_3
+      rect:
+        serializedVersion: 2
+        x: 272
+        y: 485
+        width: 155
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 4, y: 4, z: 4, w: 4}
+      outline: []
+    - name: concrete_4
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 459
+        width: 467
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 4, y: 4, z: 4, w: 4}
+      outline: []
+    - name: concrete_5
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 405
+        width: 38
+        height: 36
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -19, y: 18}
+        - {x: -19, y: -18}
+        - {x: 19, y: -18}
+        - {x: 19, y: 18}
+    - name: concrete_6
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 405
+        width: 37
+        height: 36
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -18.5, y: 18}
+        - {x: -18.5, y: -18}
+        - {x: 18.5, y: -18}
+        - {x: 18.5, y: 18}
+    - name: concrete_7
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 330
+        width: 69
+        height: 68
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 14, y: 14, z: 13, w: 12}
+      outline:
+      - - {x: -34.5, y: 34}
+        - {x: -34.5, y: -34}
+        - {x: 34.5, y: -34}
+        - {x: 34.5, y: 34}
+    - name: concrete_8
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 261
+        width: 139
+        height: 137
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 14, y: 14, z: 13, w: 12}
+      outline:
+      - - {x: -69.5, y: 68.5}
+        - {x: -69.5, y: -68.5}
+        - {x: 69.5, y: -68.5}
+        - {x: 69.5, y: 68.5}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
