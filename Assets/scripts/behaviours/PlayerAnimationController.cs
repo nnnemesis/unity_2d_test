@@ -1,32 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class PlayerAnimationController : MonoBehaviour, ITireEventListener {
+public class PlayerAnimationController : MonoBehaviour {
 
     private Animator Animator;
     private IEventTire EventTire;
 
     void Start ()
     {
-        EventTire = GetComponent<IEventTire>();
+        EventTire = this.GetEventTire();
         Animator = GetComponent<Animator>();
-        EventTire.AddEventListener(TireEventType.ChangedCurrentWeapon, this);
-        EventTire.AddEventListener(TireEventType.WeaponUseStateChangedEvent, this);
+        EventTire.AddEventListener(TireEventType.ChangedCurrentWeapon, OnPlayerChangedCurrentWeapon);
+        //EventTire.AddEventListener(TireEventType.WeaponUseStateChangedEvent, OnWeaponUseStateChangedEvent);
     }
 	
-    public void OnTireEvent(TireEvent ev)
-    {
-        if(ev.Type == TireEventType.WeaponUseStateChangedEvent)
-        {
-            //OnWeaponUseStateChangedEvent((WeaponUseStateChangedEvent)ev);
-        }
-        else if (ev.Type == TireEventType.ChangedCurrentWeapon)
-        {
-            OnPlayerChangedCurrentWeapon((ChangedCurrentWeapon)ev);
-        }
-    }
-
-    private void OnPlayerChangedCurrentWeapon(ChangedCurrentWeapon e)
+    private void OnPlayerChangedCurrentWeapon(object param)
     {
         //if (e.NewCurrentWeapon != null)
         //{
@@ -34,9 +22,10 @@ public class PlayerAnimationController : MonoBehaviour, ITireEventListener {
         //}
     }
 
-    private void OnWeaponUseStateChangedEvent(WeaponUseStateChangedEvent ev)
+    private void OnWeaponUseStateChangedEvent(object param)
     {
-        if (ev.NewState == WeaponUseState.Use)
+        WeaponUseState newState = (WeaponUseState)param;
+        if (newState == WeaponUseState.Use)
         {
             Animator.SetTrigger("UseAxeWeapon");
         }

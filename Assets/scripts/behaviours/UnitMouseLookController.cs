@@ -1,16 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class UnitMouseLookController : MonoBehaviour, ITireEventListener {
+public class UnitMouseLookController : MonoBehaviour {
 
     private BaseMoveState BaseMoveState;
     private IEventTire EventTire;
 
     void Start()
     {
-        EventTire = GetComponent<IEventTire>();
+        EventTire = this.GetEventTire();
         BaseMoveState = GetComponent<BaseMoveState>();
-        EventTire.AddEventListener(TireEventType.ChangedDirectionEvent, this);
+        EventTire.AddEventListener(TireEventType.ChangedDirectionEvent, OnChangedDirectionEvent);
     }
 
     void Update()
@@ -29,18 +29,11 @@ public class UnitMouseLookController : MonoBehaviour, ITireEventListener {
         }
     }
 
-    public void OnTireEvent(TireEvent ev)
+    void OnChangedDirectionEvent(object param)
     {
-        if(ev.Type == TireEventType.ChangedDirectionEvent)
-        {
-            OnChangedDirectionEvent((ChangedDirectionEvent)ev);
-        }
-    }
-
-    void OnChangedDirectionEvent(ChangedDirectionEvent e)
-    {
+        sbyte newDirection = (sbyte)param;
         var rotation = transform.rotation;
-        if (e.NewDirection > 0)
+        if (newDirection > 0)
         {
             rotation.SetLookRotation(Vector3.forward);
         }

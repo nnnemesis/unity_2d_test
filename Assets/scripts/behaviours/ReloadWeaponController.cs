@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class ReloadWeaponController : MonoBehaviour, ITireEventListener
+public class ReloadWeaponController : MonoBehaviour
 {
     private WeaponState State;
     private IEventTire EventTire;
@@ -10,32 +10,20 @@ public class ReloadWeaponController : MonoBehaviour, ITireEventListener
     void Start()
     {
         State = GetComponent<WeaponState>();
-        EventTire = GetComponent<IEventTire>();
-        EventTire.AddEventListener(TireEventType.ControlEvent, this);
-        EventTire.AddEventListener(TireEventType.AmmoPickupEvent, this);
+        EventTire = this.GetEventTire();
+        EventTire.AddEventListener(TireEventType.ControlEvent, OnControlEvent);
+        EventTire.AddEventListener(TireEventType.AmmoPickupEvent, OnAmmoPickupEvent);
     }
 
     void OnDestroy()
     {
-        EventTire.RemoveEventListener(TireEventType.ControlEvent, this);
-        EventTire.RemoveEventListener(TireEventType.AmmoPickupEvent, this);
+        EventTire.RemoveEventListener(TireEventType.ControlEvent, OnControlEvent);
+        EventTire.RemoveEventListener(TireEventType.AmmoPickupEvent, OnAmmoPickupEvent);
     }
 
-    public void OnTireEvent(TireEvent ev)
+    void OnAmmoPickupEvent(object param)
     {
-        if (ev.Type == TireEventType.ControlEvent)
-        {
-            OnControlEvent((ControlEvent)ev);
-        }
-        else if (ev.Type == TireEventType.AmmoPickupEvent)
-        {
-            OnAmmoPickupEvent((AmmoPickupEvent)ev);
-        }
-    }
-
-    void OnAmmoPickupEvent(AmmoPickupEvent ev)
-    {
-        var ammoPickup = ev.AmmoPickup;
+        var ammoPickup = (AmmoPickup)param;
         var weaponType = ammoPickup.WeaponType;
         // if not current weapon
         if (State.WeaponType == weaponType)
@@ -44,9 +32,9 @@ public class ReloadWeaponController : MonoBehaviour, ITireEventListener
         }
     }
 
-    void OnControlEvent(ControlEvent e)
+    void OnControlEvent(object param)
     {
-        Dictionary<ControlAction, bool> actions = e.Actions;
+        Dictionary<ControlAction, bool> actions = (Dictionary<ControlAction, bool>)param;
         if (actions[ControlAction.Recharge])
         {
             Recharge();

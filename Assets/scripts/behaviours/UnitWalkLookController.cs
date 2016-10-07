@@ -1,32 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class UnitWalkLookController : MonoBehaviour, ITireEventListener {
+public class UnitWalkLookController : MonoBehaviour {
 
     private BaseMoveState BaseMoveState;
     private IEventTire EventTire;
 
     void Start()
     {
-        EventTire = GetComponent<IEventTire>();
+        EventTire = this.GetEventTire();
         BaseMoveState = GetComponent<BaseMoveState>();
-        EventTire.AddEventListener(TireEventType.ChangedMoveStateEvent, this);
-        EventTire.AddEventListener(TireEventType.ChangedDirectionEvent, this);
+        EventTire.AddEventListener(TireEventType.ChangedMoveStateEvent, OnChangedMoveStateEvent);
+        EventTire.AddEventListener(TireEventType.ChangedDirectionEvent, OnChangedDirectionEvent);
     }
 
-    public void OnTireEvent(TireEvent ev)
-    {
-        if(ev.Type == TireEventType.ChangedMoveStateEvent)
-        {
-            OnChangedMoveStateEvent((ChangedMoveStateEvent)ev);
-        }
-        else if (ev.Type == TireEventType.ChangedDirectionEvent)
-        {
-            OnChangedDirectionEvent((ChangedDirectionEvent)ev);
-        }
-    }
-
-    void OnChangedMoveStateEvent(ChangedMoveStateEvent e)
+    void OnChangedMoveStateEvent(object param)
     {
         var moveState = BaseMoveState.MoveState;
         if (moveState == MoveState.Right)
@@ -39,10 +27,11 @@ public class UnitWalkLookController : MonoBehaviour, ITireEventListener {
         }
     }
 
-    void OnChangedDirectionEvent(ChangedDirectionEvent e)
+    void OnChangedDirectionEvent(object param)
     {
+        sbyte newDirection = (sbyte)param;
         var rotation = transform.rotation;
-        if (e.NewDirection > 0)
+        if (newDirection > 0)
         {
             rotation.SetLookRotation(Vector3.forward);
         }

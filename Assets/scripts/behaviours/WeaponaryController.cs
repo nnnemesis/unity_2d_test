@@ -1,46 +1,50 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class WeaponaryController : MonoBehaviour, ITireEventListener {
+public class WeaponaryController : MonoBehaviour {
 
     private WeaponaryState WeaponaryState;
     private IEventTire EventTire;
     public Transform LeftHandTransform;
     public GameObject CurrentWeapon;
 
-    public void OnTireEvent(TireEvent ev)
+    void Start()
     {
-        if (ev.Type == TireEventType.SaveWeaponStateEvent)
+        EventTire = this.GetEventTire();
+        EventTire.AddEventListener(TireEventType.ControlEvent, OnControlEvent);
+        EventTire.AddEventListener(TireEventType.SaveWeaponStateEvent, OnSaveWeaponStateEvent);
+        EventTire.AddEventListener(TireEventType.LoadWeaponStateEvent, OnLoadWeaponStateEvent);
+        EventTire.AddEventListener(TireEventType.WeaponPickupEvent, OnWeaponPickupEvent);
+
+        WeaponaryState = GetComponent<WeaponaryState>();
+        if (WeaponaryState.CurrentWeaponIndex >= 0)
         {
-            OnSaveWeaponStateEvent((SaveWeaponStateEvent)ev);
-        }
-        else if (ev.Type == TireEventType.LoadWeaponStateEvent)
-        {
-            OnLoadWeaponStateEvent((LoadWeaponStateEvent)ev);
-        }
-        else if(ev.Type == TireEventType.ControlEvent)
-        {
-            OnControlEvent((ControlEvent)ev);
-        }
-        else if(ev.Type == TireEventType.WeaponPickupEvent)
-        {
-            OnWeaponPickupEvent((WeaponPickupEvent)ev);
+            SelectWeapon(WeaponaryState.CurrentWeaponIndex);
         }
     }
 
-    void OnSaveWeaponStateEvent(SaveWeaponStateEvent ev)
+    void OnDestroy()
     {
-        WeaponaryState.SaveKnownWeapon(ev.WeaponData);
+        EventTire.RemoveEventListener(TireEventType.ControlEvent, OnControlEvent);
+        EventTire.RemoveEventListener(TireEventType.SaveWeaponStateEvent, OnSaveWeaponStateEvent);
+        EventTire.RemoveEventListener(TireEventType.LoadWeaponStateEvent, OnLoadWeaponStateEvent);
+        EventTire.RemoveEventListener(TireEventType.WeaponPickupEvent, OnWeaponPickupEvent);
     }
 
-    void OnLoadWeaponStateEvent(LoadWeaponStateEvent ev)
+    void OnSaveWeaponStateEvent(object param)
     {
-        ev.WeaponData = WeaponaryState.LoadKnownWeapon(ev.WeaponType);
+        WeaponaryState.SaveKnownWeapon((WeaponData)param);
     }
 
-    void OnControlEvent(ControlEvent e)
+    void OnLoadWeaponStateEvent(object param)
     {
-        Dictionary<ControlAction, bool> actions = e.Actions;
+        object[] _params = (object[])param;
+        _params[1] = WeaponaryState.LoadKnownWeapon((WeaponType)_params[0]);
+    }
+
+    void OnControlEvent(object param)
+    {
+        Dictionary<ControlAction, bool> actions = (Dictionary<ControlAction, bool>)param;
         if (actions[ControlAction.NextWeapon])
         {
             TrySelectNextWeapon();
@@ -51,9 +55,9 @@ public class WeaponaryController : MonoBehaviour, ITireEventListener {
         }
     }
 
-    void OnWeaponPickupEvent(WeaponPickupEvent ev)
+    void OnWeaponPickupEvent(object param)
     {
-        var pickup = ev.WeaponPickup;
+        var pickup = (WeaponPickup)param;
         var weaponType = pickup.WeaponType;
         var currentWeaponIndex = WeaponaryState.CurrentWeaponIndex;
         // if not current weapon
@@ -69,29 +73,6 @@ public class WeaponaryController : MonoBehaviour, ITireEventListener {
         {
             ReplaceWeapon(currentWeaponIndex, weaponType);
         }
-    }
-
-    void Start()
-    {
-        EventTire = GetComponent<IEventTire>();
-        EventTire.AddEventListener(TireEventType.ControlEvent, this);
-        EventTire.AddEventListener(TireEventType.SaveWeaponStateEvent, this);
-        EventTire.AddEventListener(TireEventType.LoadWeaponStateEvent, this);
-        EventTire.AddEventListener(TireEventType.WeaponPickupEvent, this);
-
-        WeaponaryState = GetComponent<WeaponaryState>();
-        if(WeaponaryState.CurrentWeaponIndex >= 0)
-        {
-            SelectWeapon(WeaponaryState.CurrentWeaponIndex);
-        }
-    }
-
-    void OnDestroy()
-    {
-        EventTire.RemoveEventListener(TireEventType.ControlEvent, this);
-        EventTire.RemoveEventListener(TireEventType.SaveWeaponStateEvent, this);
-        EventTire.RemoveEventListener(TireEventType.LoadWeaponStateEvent, this);
-        EventTire.RemoveEventListener(TireEventType.WeaponPickupEvent, this);
     }
 
     void TrySelectPrevWeapon()
@@ -168,8 +149,6 @@ public class WeaponaryController : MonoBehaviour, ITireEventListener {
         WeaponType weaponType = WeaponaryState.GetOwnedWeaponType(index);
         GameObject weaponPrefab = PrefabStore.Instance.GetPrefab(GetPrefabIdentifier(weaponType));
         GameObject weapon = (GameObject)Instantiate(weaponPrefab, Vector3.zero, Quaternion.identity);
-        SingleEventTireProxy proxy = weapon.AddComponent<SingleEventTireProxy>();
-        proxy.Instance = EventTire;
         weapon.transform.SetParent(LeftHandTransform, false);
         CurrentWeapon = weapon;
         WeaponaryState.CurrentWeaponIndex = index;

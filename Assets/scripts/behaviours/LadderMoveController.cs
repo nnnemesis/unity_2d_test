@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 // controls unit movements when unit on ladder
-public class LadderMoveController : MonoBehaviour, ITireEventListener {
+public class LadderMoveController : MonoBehaviour {
 
     private IEventTire EventTire;
     private Rigidbody2D Rigidbody;
@@ -10,25 +10,25 @@ public class LadderMoveController : MonoBehaviour, ITireEventListener {
 
     void Start()
     {
-        EventTire = GetComponent<IEventTire>();
+        EventTire = this.GetEventTire();
         Rigidbody = GetComponent<Rigidbody2D>();
         BaseState = GetComponent<BaseMoveState>();
         BaseState.VerticalMoveState = VerticalMoveState.Idle;
         BaseState.MoveState = MoveState.Idle;
 
-        EventTire.AddEventListener(TireEventType.ControlEvent, this);
-        EventTire.AddEventListener(TireEventType.ChangedMoveStateEvent, this);
-        EventTire.AddEventListener(TireEventType.ChangedVerticalMoveStateEvent, this);
-        EventTire.AddEventListener(TireEventType.ChangedJumpStateEvent, this);
+        EventTire.AddEventListener(TireEventType.ControlEvent, OnControlEvent);
+        EventTire.AddEventListener(TireEventType.ChangedMoveStateEvent, UpdateHorizontalMoveState);
+        EventTire.AddEventListener(TireEventType.ChangedVerticalMoveStateEvent, UpdateVerticalMoveState);
+        EventTire.AddEventListener(TireEventType.ChangedJumpStateEvent, OnPlayerChangedJumpStateEvent);
         Rigidbody.gravityScale = 0f;
     }
 
     void OnDestroy()
     {
-        EventTire.RemoveEventListener(TireEventType.ControlEvent, this);
-        EventTire.RemoveEventListener(TireEventType.ChangedMoveStateEvent, this);
-        EventTire.RemoveEventListener(TireEventType.ChangedVerticalMoveStateEvent, this);
-        EventTire.RemoveEventListener(TireEventType.ChangedJumpStateEvent, this);
+        EventTire.RemoveEventListener(TireEventType.ControlEvent, OnControlEvent);
+        EventTire.RemoveEventListener(TireEventType.ChangedMoveStateEvent, UpdateHorizontalMoveState);
+        EventTire.RemoveEventListener(TireEventType.ChangedVerticalMoveStateEvent, UpdateVerticalMoveState);
+        EventTire.RemoveEventListener(TireEventType.ChangedJumpStateEvent, OnPlayerChangedJumpStateEvent);
     }
 
     void FixedUpdate()
@@ -46,27 +46,7 @@ public class LadderMoveController : MonoBehaviour, ITireEventListener {
         }
     }
 
-    public void OnTireEvent(TireEvent ev)
-    {
-        if(ev.Type == TireEventType.ControlEvent)
-        {
-            OnControlEvent((ControlEvent)ev);
-        }
-        else if (ev.Type == TireEventType.ChangedMoveStateEvent)
-        {
-            UpdateHorizontalMoveState();
-        }
-        else if (ev.Type == TireEventType.ChangedVerticalMoveStateEvent)
-        {
-            UpdateVerticalMoveState();
-        }
-        else if (ev.Type == TireEventType.ChangedJumpStateEvent)
-        {
-            OnPlayerChangedJumpStateEvent((ChangedJumpStateEvent)ev);
-        }
-    }
-
-    void UpdateVerticalMoveState()
+    void UpdateVerticalMoveState(object param)
     {
         if (BaseState.VerticalMoveState == VerticalMoveState.Up)
         {
@@ -82,7 +62,7 @@ public class LadderMoveController : MonoBehaviour, ITireEventListener {
         }
     }
 
-    void UpdateHorizontalMoveState()
+    void UpdateHorizontalMoveState(object param)
     {
         if (BaseState.MoveState == MoveState.Left)
         {
@@ -98,9 +78,9 @@ public class LadderMoveController : MonoBehaviour, ITireEventListener {
         }
     }
 
-    private void OnControlEvent(ControlEvent e)
+    private void OnControlEvent(object param)
     {
-        Dictionary<ControlAction, bool> actions = e.Actions;
+        Dictionary<ControlAction, bool> actions = (Dictionary<ControlAction, bool>)param;
         if (actions[ControlAction.WalkForward])
         {
             BaseState.MoveState = MoveState.Right;
@@ -133,7 +113,7 @@ public class LadderMoveController : MonoBehaviour, ITireEventListener {
         }
     }
 
-    private void OnPlayerChangedJumpStateEvent(ChangedJumpStateEvent e)
+    private void OnPlayerChangedJumpStateEvent(object param)
     {
         if(BaseState.JumpState == JumpState.Jump)
         {

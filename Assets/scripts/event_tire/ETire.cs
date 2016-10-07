@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 public class ETire // Base event tire
 {
-    private Dictionary<TEType, HashSet<Action<System.Object>>> HandlersMap = new Dictionary<TEType, HashSet<Action<System.Object>>>();
+    private Dictionary<TireEventType, HashSet<Action<System.Object>>> HandlersMap = new Dictionary<TireEventType, HashSet<Action<System.Object>>>();
 
-    public void SendEvent(TEType type, Object param)
+    public void SendEvent(TireEventType type, Object param)
     {
         var handlersList = HandlersMap[type];
         if (handlersList == null)
@@ -17,7 +17,7 @@ public class ETire // Base event tire
         }
     }
 
-    public void AddEventListener(TEType type, Action<object> handler)
+    public void AddEventListener(TireEventType type, Action<object> handler)
     {
         var handlersList = HandlersMap[type];
         if(handlersList == null)
@@ -28,7 +28,7 @@ public class ETire // Base event tire
         handlersList.Add(handler);
     }
 
-    public void RemoveEventListener(TEType type, Action<object> handler)
+    public void RemoveEventListener(TireEventType type, Action<object> handler)
     {
         var handlersList = HandlersMap[type];
         if (handlersList == null)

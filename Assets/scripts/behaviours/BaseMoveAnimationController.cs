@@ -1,41 +1,35 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
 
-public class BaseMoveAnimationController : MonoBehaviour, ITireEventListener {
+public class BaseMoveAnimationController : MonoBehaviour {
 
     private Animator Animator;
     private IEventTire EventTire;
 
     void Start()
     {
-        EventTire = GetComponent<IEventTire>();
+        EventTire = this.GetEventTire();
         Animator = GetComponent<Animator>();
-        EventTire.AddEventListener(TireEventType.ChangedMoveStateEvent, this);
-        EventTire.AddEventListener(TireEventType.ChangedJumpStateEvent, this);
+        EventTire.AddEventListener(TireEventType.ChangedMoveStateEvent, OnPlayerChangedMoveStateEvent);
+        EventTire.AddEventListener(TireEventType.ChangedJumpStateEvent, OnPlayerChangedJumpStateEvent);
     }
 
-    public void OnTireEvent(TireEvent ev)
+    void OnDestory()
     {
-        if(ev.Type == TireEventType.ChangedMoveStateEvent)
-        {
-            OnPlayerChangedMoveStateEvent((ChangedMoveStateEvent)ev);
-        }
-        else if (ev.Type == TireEventType.ChangedJumpStateEvent)
-        {
-            OnPlayerChangedJumpStateEvent((ChangedJumpStateEvent)ev);
-        }
+
     }
 
-    private void OnPlayerChangedMoveStateEvent(ChangedMoveStateEvent e)
+    private void OnPlayerChangedMoveStateEvent(object param)
     {
-        var newState = e.NewState;
+        object[] _params = (object[])param;
+        var newState = (MoveState)_params[0];
         if (newState == MoveState.Idle)
         {
             Animator.SetTrigger("MoveIdle");
         }
         else if (newState == MoveState.Left || newState == MoveState.Right)
         {
-            if (e.ShiftWalk)
+            var shiftWalk = (bool)_params[1];
+            if (shiftWalk)
             {
                 Animator.SetTrigger("MoveShiftWalk");
             }
@@ -43,13 +37,12 @@ public class BaseMoveAnimationController : MonoBehaviour, ITireEventListener {
             {
                 Animator.SetTrigger("MoveWalk");
             }
-            
         }
     }
 
-    private void OnPlayerChangedJumpStateEvent(ChangedJumpStateEvent e)
+    private void OnPlayerChangedJumpStateEvent(object param)
     {
-        var newState = e.NewState;
+        JumpState newState = (JumpState)param;
         if (newState == JumpState.Jump)
         {
             Animator.SetTrigger("Jump");

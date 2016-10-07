@@ -10,7 +10,7 @@ public class WeaponSaveLoadController : MonoBehaviour
     void Start()
     {
         WeaponState = GetComponent<WeaponState>();
-        EventTire = GetComponent<IEventTire>();
+        EventTire = this.GetEventTire();
         LoadWeaponState();
     }
 
@@ -21,9 +21,9 @@ public class WeaponSaveLoadController : MonoBehaviour
 
     void LoadWeaponState()
     {
-        var ev = new LoadWeaponStateEvent() { WeaponType = WeaponState.WeaponType };
-        EventTire.SendEvent(ev);
-        var weaponData = ev.WeaponData;
+        var _params = new object[] { WeaponState.WeaponType, null };
+        EventTire.SendEvent(TEPath.Up, TireEventType.LoadWeaponStateEvent, _params);
+        var weaponData = (WeaponData)_params[1];
         if (weaponData == null)
         {
             weaponData = new WeaponData();
@@ -49,7 +49,7 @@ public class WeaponSaveLoadController : MonoBehaviour
         , MaxTotalAmmo = WeaponState.MaxTotalAmmo
         , OneUseTime = WeaponState.OneUseTime
         , ReloadTime = WeaponState.ReloadTime};
-        EventTire.SendEvent(new SaveWeaponStateEvent() { WeaponData = weaponData });
+        EventTire.SendEvent(TEPath.Up, TireEventType.SaveWeaponStateEvent, weaponData);
     }
 
 }

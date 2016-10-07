@@ -1,17 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ChangedAiTarget : TireEvent
-{
-    public ChangedAiTarget() { Type = TireEventType.ChangedAiTarget; }
-    public GameObject NewTarget;
-
-    public override string ToString()
-    {
-        return "Type " + Type + " NewTarget " + NewTarget.name;
-    }
-}
-
 public class EnemyAiState : MonoBehaviour
 {
     public float FindTargetDistance = 20f;
@@ -28,14 +17,14 @@ public class EnemyAiState : MonoBehaviour
             if(_CurrentTarget != value)
             {
                 _CurrentTarget = value;
-                EventTire.SendEvent(new ChangedAiTarget() { NewTarget = value });
+                EventTire.SendEvent(TEPath.Up, TireEventType.ChangedAiTarget, value);
             }
         }
     }
 
     void Start()
     {
-        EventTire = GetComponent<IEventTire>();
+        EventTire = this.GetEventTire();
     }
 
 }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class HitWeaponController : MonoBehaviour, ITireEventListener
+public class HitWeaponController : MonoBehaviour
 {
     private WeaponState State;
     private IEventTire EventTire;
@@ -9,21 +9,13 @@ public class HitWeaponController : MonoBehaviour, ITireEventListener
     void Start()
     {
         State = GetComponent<WeaponState>();
-        EventTire = GetComponent<IEventTire>();
-        EventTire.AddEventListener(TireEventType.ControlEvent, this);
+        EventTire = this.GetEventTire();
+        EventTire.AddEventListener(TireEventType.ControlEvent, OnControlEvent);
     }
 
-    public void OnTireEvent(TireEvent ev)
+    void OnControlEvent(object param)
     {
-        if (ev.Type == TireEventType.ControlEvent)
-        {
-            OnControlEvent((ControlEvent)ev);
-        }
-    }
-
-    void OnControlEvent(ControlEvent e)
-    {
-        Dictionary<ControlAction, bool> actions = e.Actions;
+        Dictionary<ControlAction, bool> actions = (Dictionary<ControlAction, bool>)param;
         if (actions[ControlAction.MainAttack])
         {
             StartUsing();

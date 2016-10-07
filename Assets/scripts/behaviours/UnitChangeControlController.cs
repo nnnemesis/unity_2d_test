@@ -1,24 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class UnitChangeControlController : MonoBehaviour, ITireEventListener {
+public class UnitChangeControlController : MonoBehaviour {
 
     private BaseMoveState BaseMoveState;
     private IEventTire EventTire;
 
     void Start()
     {
-        EventTire = GetComponent<IEventTire>();
+        EventTire = this.GetEventTire();
         BaseMoveState = GetComponent<BaseMoveState>();
-        EventTire.AddEventListener(TireEventType.ControlEvent, this);
-    }
-
-    public void OnTireEvent(TireEvent ev)
-    {
-        if(ev.Type == TireEventType.ControlEvent)
-        {
-            OnControlEvent((ControlEvent)ev);
-        }
+        EventTire.AddEventListener(TireEventType.ControlEvent, OnControlEvent);
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -42,9 +34,9 @@ public class UnitChangeControlController : MonoBehaviour, ITireEventListener {
         }
     }
 
-    private void OnControlEvent(ControlEvent e)
+    private void OnControlEvent(object param)
     {
-        Dictionary<ControlAction, bool> actions = e.Actions;
+        Dictionary<ControlAction, bool> actions = (Dictionary<ControlAction, bool>)param;
         if(BaseMoveState.CanUseLadder && actions[ControlAction.Use])
         {
             BaseMoveState.MoveControlType = UnitMoveControlType.LadderControl;

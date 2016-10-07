@@ -17,11 +17,11 @@ public class WeaponaryState : MonoBehaviour
                 _CurrentWeaponIndex = value;
                 if(value >= 0)
                 {
-                    EventTire.SendEvent(new ChangedCurrentWeapon() { NewWeaponType = OwnedWeapons[value], NewWeaponIndex = CurrentWeaponIndex });
+                    EventTire.SendEvent(TEPath.Up, TireEventType.ChangedCurrentWeapon, new object[] {OwnedWeapons[value], CurrentWeaponIndex });
                 }
                 else
                 {
-                    EventTire.SendEvent(new ChangedCurrentWeapon() { NewWeaponIndex = CurrentWeaponIndex });
+                    EventTire.SendEvent(TEPath.Up, TireEventType.ChangedCurrentWeapon, new object[] { null, CurrentWeaponIndex });
                 }
                 
             }
@@ -82,12 +82,12 @@ public class WeaponaryState : MonoBehaviour
     {
         Debug.LogWarning("index " + index + " WeaponType " + WeaponType);
         OwnedWeapons[index] = WeaponType;
-        EventTire.SendEvent(new ReplacedCurrentWeaponEvent() { Index = index, WeaponType = WeaponType });
+        EventTire.SendEvent(TEPath.Up, TireEventType.ReplacedCurrentWeaponEvent, new object[] {index, WeaponType });
     }
 
     void Start()
     {
-        EventTire = GetComponent<IEventTire>();
+        EventTire = this.GetEventTire();
         OwnedWeapons.Add(WeaponType.None);
         OwnedWeapons.Add(WeaponType.None);
         OwnedWeapons.Add(WeaponType.None);

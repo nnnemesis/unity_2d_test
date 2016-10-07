@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class AutomatWeaponController : MonoBehaviour,ITireEventListener
+public class AutomatWeaponController : MonoBehaviour
 {
     private WeaponState State;
     private IEventTire EventTire;
@@ -15,21 +15,18 @@ public class AutomatWeaponController : MonoBehaviour,ITireEventListener
     void Start()
     {
         State = GetComponent<WeaponState>();
-        EventTire = GetComponent<IEventTire>();
-        EventTire.AddEventListener(TireEventType.ControlEvent, this);
+        EventTire = this.GetEventTire();
+        EventTire.AddEventListener(TireEventType.ControlEvent, OnControlEvent);
     }
 
-    public void OnTireEvent(TireEvent ev)
+    void OnDestory()
     {
-        if (ev.Type == TireEventType.ControlEvent)
-        {
-            OnControlEvent((ControlEvent)ev);
-        }
+        EventTire.RemoveEventListener(TireEventType.ControlEvent, OnControlEvent);
     }
 
-    void OnControlEvent(ControlEvent e)
+    void OnControlEvent(object param)
     {
-        Dictionary<ControlAction, bool> actions = e.Actions;
+        Dictionary<ControlAction, bool> actions = (Dictionary<ControlAction, bool>)param;
         if (actions[ControlAction.MainAttack])
         {
             StartUsing();

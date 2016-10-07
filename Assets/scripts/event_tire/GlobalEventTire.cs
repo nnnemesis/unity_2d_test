@@ -5,9 +5,9 @@ using System.Collections.Generic;
 public class GlobalEventTire : Singleton<GlobalEventTire>, IETireHierarchy
 {
     private ETire Tire = new ETire();
-    private HashSet<IETire> Children = new HashSet<IETire>();
+    private HashSet<IEventTire> Children = new HashSet<IEventTire>();
 
-    public void SendEvent(TEPath path, TEType type, object param)
+    public void SendEvent(TEPath path, TireEventType type, object param)
     {
         Tire.SendEvent(type, param);
         if (path == TEPath.Local)
@@ -32,17 +32,17 @@ public class GlobalEventTire : Singleton<GlobalEventTire>, IETireHierarchy
         }
     }
 
-    public void AddChild(IETire child)
+    public void AddChild(IEventTire child)
     {
         Children.Add(child);
     }
 
-    public void AddEventListener(TEType type, Action<object> handler)
+    public void AddEventListener(TireEventType type, Action<object> handler)
     {
         Tire.AddEventListener(type, handler);
     }
 
-    public void RemoveEventListener(TEType type, Action<object> handler)
+    public void RemoveEventListener(TireEventType type, Action<object> handler)
     {
         Tire.RemoveEventListener(type, handler);
     }

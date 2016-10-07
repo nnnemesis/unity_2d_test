@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class SitDownController : MonoBehaviour, ITireEventListener {
+public class SitDownController : MonoBehaviour {
 
     private BaseMoveState BaseState;
     private IEventTire EventTire;
@@ -9,33 +9,21 @@ public class SitDownController : MonoBehaviour, ITireEventListener {
 
     void Start()
     {
-        EventTire = GetComponent<IEventTire>();
+        EventTire = this.GetEventTire();
         BaseState = GetComponent<BaseMoveState>();
         UpperCollider.enabled = true;
 
-        EventTire.AddEventListener(TireEventType.ControlEvent, this);
-        EventTire.AddEventListener(TireEventType.ChangedSitDownEvent, this);
+        EventTire.AddEventListener(TireEventType.ControlEvent, OnControlEvent);
+        EventTire.AddEventListener(TireEventType.ChangedSitDownEvent, OnChangedSitDownEvent);
     }
 
     void OnDestroy()
     {
-        EventTire.RemoveEventListener(TireEventType.ControlEvent, this);
-        EventTire.RemoveEventListener(TireEventType.ChangedSitDownEvent, this);
+        EventTire.RemoveEventListener(TireEventType.ControlEvent, OnControlEvent);
+        EventTire.RemoveEventListener(TireEventType.ChangedSitDownEvent, OnChangedSitDownEvent);
     }
 
-    public void OnTireEvent(TireEvent ev)
-    {
-        if(ev.Type == TireEventType.ControlEvent)
-        {
-            OnControlEvent((ControlEvent)ev);
-        }
-        else if(ev.Type == TireEventType.ChangedSitDownEvent)
-        {
-            OnChangedSitDownEvent((ChangedSitDownEvent)ev);
-        }
-    }
-
-    void OnChangedSitDownEvent(ChangedSitDownEvent e)
+    void OnChangedSitDownEvent(object param)
     {
         if (BaseState.SitDown)
         {
@@ -47,9 +35,9 @@ public class SitDownController : MonoBehaviour, ITireEventListener {
         }
     }
 
-    private void OnControlEvent(ControlEvent e)
+    private void OnControlEvent(object param)
     {
-        Dictionary<ControlAction, bool> actions = e.Actions;
+        Dictionary<ControlAction, bool> actions = (Dictionary < ControlAction, bool>)param;
         if(actions[ControlAction.SitDown])
         {
             BaseState.SitDown = true;

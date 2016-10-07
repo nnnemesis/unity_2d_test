@@ -17,14 +17,14 @@ public class BaseLifeState : MonoBehaviour
             if (_Health != value)
             {
                 _Health = value;
-                EventTire.SendEvent(new ChangedHealthEvent() { NewHealth = value });
+                EventTire.SendEvent(TEPath.Up, TireEventType.ChangedHealthEvent, value);
             }
         }
     }
 
     void Start()
     {
-        EventTire = GetComponent<IEventTire>();
+        EventTire = this.GetEventTire();
     }
     
 }

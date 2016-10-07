@@ -15,7 +15,7 @@ public class WeaponState : MonoBehaviour
             if (_CurrentMagazineAmmo != value)
             {
                 _CurrentMagazineAmmo = value;
-                EventTire.SendEvent(new WeaponCurrentAmmoChangedEvent() { NewState = value });
+                EventTire.SendEvent(TEPath.Up, TireEventType.WeaponCurrentAmmoChangedEvent, value);
             }
         }
     }
@@ -29,7 +29,7 @@ public class WeaponState : MonoBehaviour
             if (_CurrentTotalAmmo != value)
             {
                 _CurrentTotalAmmo = value;
-                EventTire.SendEvent(new WeaponCurrentTotalAmmoChangedEvent() { NewState = value });
+                EventTire.SendEvent(TEPath.Up, TireEventType.WeaponCurrentTotalAmmoChangedEvent, value);
             }
         }
     }
@@ -49,14 +49,14 @@ public class WeaponState : MonoBehaviour
             if(_UseState != value)
             {
                 _UseState = value;
-                EventTire.SendEvent(new WeaponUseStateChangedEvent() { NewState = value });
+                EventTire.SendEvent(TEPath.Up, TireEventType.WeaponUseStateChangedEvent, value);
             }
         }
     }
 
     void Start()
     {
-        EventTire = GetComponent<IEventTire>();
+        EventTire = this.GetEventTire();
     }
     
 }

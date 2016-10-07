@@ -11,7 +11,7 @@ public class EnemyAiController : MonoBehaviour
     void Start()
     {
         EnemyAiState = GetComponent<EnemyAiState>();
-        EventTire = GetComponent<IEventTire>();
+        EventTire = this.GetEventTire();
         SelfUnit = GetComponent<IUnit>();
 
         Actions.Add(ControlAction.WalkForward, false);
@@ -83,7 +83,7 @@ public class EnemyAiController : MonoBehaviour
                 //{
                 //    Debug.Log("AI action "+ pair.Key + " value "+pair.Value);
                 //}
-                EventTire.SendEvent(new ControlEvent() { Actions = Actions });
+                EventTire.SendEvent(TEPath.Up, TireEventType.ControlEvent, Actions);
             }                
         }
     }

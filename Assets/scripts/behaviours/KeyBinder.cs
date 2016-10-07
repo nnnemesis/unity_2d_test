@@ -10,7 +10,7 @@ public class KeyBinder : MonoBehaviour {
 
     void Start()
     {
-        EventTire = GetComponent<IEventTire>();
+        EventTire = this.GetEventTire();
 
         KeyMap.Add(KeyCode.D, ControlAction.WalkForward);
         KeyMap.Add(KeyCode.A, ControlAction.WalkBack);
@@ -34,7 +34,7 @@ public class KeyBinder : MonoBehaviour {
         State[ControlAction.NextWeapon] = false;
         State[ControlAction.PrevWeapon] = false;
 
-        EventTire.SendEvent(new ControlEvent() { Actions = State });
+        EventTire.SendEvent(TEPath.Up, TireEventType.ControlEvent, State);
     }
 
     void Update()
@@ -73,7 +73,7 @@ public class KeyBinder : MonoBehaviour {
         if (changed)
         {
             //Debug.Log("ControlEvent");
-            EventTire.SendEvent(new ControlEvent() { Actions = State });
+            EventTire.SendEvent(TEPath.Up, TireEventType.ControlEvent, State);
         }
     }
 

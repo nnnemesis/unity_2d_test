@@ -1,9 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
 
-public enum TEType  // Tire event type
+public enum TireEventType  // Tire event type
 {
-
+    ControlEvent,
+    ChangedDirectionEvent,
+    ChangedMoveStateEvent,
+    ChangedVerticalMoveStateEvent,
+    ChangedJumpStateEvent,
+    WeaponUseStateChangedEvent,
+    WeaponCurrentAmmoChangedEvent,
+    WeaponCurrentTotalAmmoChangedEvent,
+    ChangedCurrentWeapon,
+    ChangedHealthEvent,
+    ChangedAiTarget,
+    ChangedUnitMoveControlType,
+    ChangedCanUseLadder,
+    SaveWeaponStateEvent,
+    LoadWeaponStateEvent,
+    ChangedCanPickupAmmoEvent,
+    AmmoPickupEvent,
+    ChangedShiftWalkEvent,
+    ChangedSitDownEvent,
+    ChangedCanPickupWeaponEvent,
+    WeaponPickupEvent,
+    ReplacedCurrentWeaponEvent,
 }
 
 public enum TEPath   // Event path
@@ -14,15 +34,15 @@ public enum TEPath   // Event path
     UpDown
 }
 
-public interface IETire // I Event tire
+public interface IEventTire // I Event tire
 {
-    void SendEvent(TEPath path, TEType type, Object param);
-    void AddEventListener(TEType type, Action<Object> handler);
-    void RemoveEventListener(TEType type, Action<Object> handler);
+    void SendEvent(TEPath path, TireEventType type, Object param);
+    void AddEventListener(TireEventType type, Action<Object> handler);
+    void RemoveEventListener(TireEventType type, Action<Object> handler);
 }
 
-public interface IETireHierarchy : IETire
+public interface IETireHierarchy : IEventTire
 {
-    void AddChild(IETire child);
+    void AddChild(IEventTire child);
 }
 

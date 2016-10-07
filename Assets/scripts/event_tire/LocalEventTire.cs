@@ -5,8 +5,8 @@ using System.Collections.Generic;
 public class LocalEventTire : MonoBehaviour, IETireHierarchy
 {
     private ETire Tire = new ETire();
-    private IETire Parent;
-    private HashSet<IETire> Children = new HashSet<IETire>();
+    private IEventTire Parent;
+    private HashSet<IEventTire> Children = new HashSet<IEventTire>();
 
     void Start()
     {
@@ -34,7 +34,7 @@ public class LocalEventTire : MonoBehaviour, IETireHierarchy
         Parent = GlobalEventTire.Instance;
     }
 
-    public void SendEvent(TEPath path, TEType type, System.Object param)
+    public void SendEvent(TEPath path, TireEventType type, System.Object param)
     {
         Tire.SendEvent(type, param);
         if (path == TEPath.Local)
@@ -61,17 +61,17 @@ public class LocalEventTire : MonoBehaviour, IETireHierarchy
         }
     }
 
-    public void AddEventListener(TEType type, Action<System.Object> handler)
+    public void AddEventListener(TireEventType type, Action<System.Object> handler)
     {
         Tire.AddEventListener(type, handler);
     }
 
-    public void RemoveEventListener(TEType type, Action<System.Object> handler)
+    public void RemoveEventListener(TireEventType type, Action<System.Object> handler)
     {
         Tire.RemoveEventListener(type, handler);
     }
 
-    public void AddChild(IETire child)
+    public void AddChild(IEventTire child)
     {
         Children.Add(child);
 

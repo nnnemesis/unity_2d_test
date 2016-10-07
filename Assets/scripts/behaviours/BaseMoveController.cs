@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 // controls unit movements on ground
-public class BaseMoveController : MonoBehaviour, ITireEventListener {
+public class BaseMoveController : MonoBehaviour {
 
     private BaseMoveState BaseState;
     private IEventTire EventTire;
@@ -10,23 +10,23 @@ public class BaseMoveController : MonoBehaviour, ITireEventListener {
 
     void Start()
     {
-        EventTire = GetComponent<IEventTire>();
+        EventTire = this.GetEventTire();
         BaseState = GetComponent<BaseMoveState>();
         Rigidbody = GetComponent<Rigidbody2D>();
 
         Rigidbody.gravityScale = 1f;
-        EventTire.AddEventListener(TireEventType.ControlEvent, this);
-        EventTire.AddEventListener(TireEventType.ChangedMoveStateEvent, this);
-        EventTire.AddEventListener(TireEventType.ChangedShiftWalkEvent, this);
-        EventTire.AddEventListener(TireEventType.ChangedJumpStateEvent, this);
+        EventTire.AddEventListener(TireEventType.ControlEvent, OnControlEvent);
+        EventTire.AddEventListener(TireEventType.ChangedMoveStateEvent, UpdateHorizontalMoveState);
+        EventTire.AddEventListener(TireEventType.ChangedShiftWalkEvent, UpdateHorizontalMoveState);
+        EventTire.AddEventListener(TireEventType.ChangedJumpStateEvent, OnPlayerChangedJumpStateEvent);
     }
 
     void OnDestroy()
     {
-        EventTire.RemoveEventListener(TireEventType.ControlEvent, this);
-        EventTire.RemoveEventListener(TireEventType.ChangedMoveStateEvent, this);
-        EventTire.RemoveEventListener(TireEventType.ChangedShiftWalkEvent, this);
-        EventTire.RemoveEventListener(TireEventType.ChangedJumpStateEvent, this);
+        EventTire.RemoveEventListener(TireEventType.ControlEvent, OnControlEvent);
+        EventTire.RemoveEventListener(TireEventType.ChangedMoveStateEvent, UpdateHorizontalMoveState);
+        EventTire.RemoveEventListener(TireEventType.ChangedShiftWalkEvent, UpdateHorizontalMoveState);
+        EventTire.RemoveEventListener(TireEventType.ChangedJumpStateEvent, OnPlayerChangedJumpStateEvent);
     }
 
     void FixedUpdate()
@@ -56,27 +56,7 @@ public class BaseMoveController : MonoBehaviour, ITireEventListener {
         }
     }
 
-    public void OnTireEvent(TireEvent ev)
-    {
-        if(ev.Type == TireEventType.ControlEvent)
-        {
-            OnControlEvent((ControlEvent)ev);
-        }
-        else if(ev.Type == TireEventType.ChangedMoveStateEvent)
-        {
-            UpdateHorizontalMoveState();
-        }
-        else if (ev.Type == TireEventType.ChangedShiftWalkEvent)
-        {
-            UpdateHorizontalMoveState();
-        }
-        else if (ev.Type == TireEventType.ChangedJumpStateEvent)
-        {
-            OnPlayerChangedJumpStateEvent((ChangedJumpStateEvent)ev);
-        }
-    }
-
-    void UpdateHorizontalMoveState()
+    void UpdateHorizontalMoveState(object param)
     {
         if (BaseState.MoveState == MoveState.Left)
         {
@@ -106,7 +86,7 @@ public class BaseMoveController : MonoBehaviour, ITireEventListener {
         }
     }
 
-    private void OnPlayerChangedJumpStateEvent(ChangedJumpStateEvent e)
+    private void OnPlayerChangedJumpStateEvent(object param)
     {
         if(BaseState.JumpState == JumpState.Jump)
         {
@@ -114,9 +94,9 @@ public class BaseMoveController : MonoBehaviour, ITireEventListener {
         }
     }
 
-    private void OnControlEvent(ControlEvent e)
+    private void OnControlEvent(object param)
     {
-        Dictionary<ControlAction, bool> actions = e.Actions;
+        Dictionary<ControlAction, bool> actions = (Dictionary<ControlAction, bool>)param;
         if(!actions[ControlAction.SitDown] && (actions[ControlAction.WalkForward] || actions[ControlAction.WalkBack]))
         {
             if (actions[ControlAction.Shift])

@@ -20,7 +20,7 @@ public class BaseMoveState : MonoBehaviour
             if(_CanUseLadder != value)
             {
                 _CanUseLadder = value;
-                EventTire.SendEvent(new ChangedCanUseLadder() { NewState = value });
+                EventTire.SendEvent(TEPath.Up, TireEventType.ChangedCanUseLadder, value);
             }
         }
     }
@@ -34,7 +34,7 @@ public class BaseMoveState : MonoBehaviour
             if(_MoveControlType != value)
             {
                 _MoveControlType = value;
-                EventTire.SendEvent(new ChangedUnitMoveControlType() { NewState = value });
+                EventTire.SendEvent(TEPath.Up, TireEventType.ChangedUnitMoveControlType, value);
             }
         }
     }
@@ -48,7 +48,7 @@ public class BaseMoveState : MonoBehaviour
             if(_JumpState != value)
             {
                 _JumpState = value;
-                EventTire.SendEvent(new ChangedJumpStateEvent() { NewState = value });
+                EventTire.SendEvent(TEPath.Up, TireEventType.ChangedJumpStateEvent, value);
             }
         }
     }
@@ -65,7 +65,7 @@ public class BaseMoveState : MonoBehaviour
             if(_MoveState != value)
             {
                 _MoveState = value;
-                EventTire.SendEvent(new ChangedMoveStateEvent() { NewState = value, ShiftWalk = ShiftWalk });
+                EventTire.SendEvent(TEPath.Up, TireEventType.ChangedMoveStateEvent, new object[] {value, ShiftWalk});
             }
         }
     }
@@ -79,7 +79,7 @@ public class BaseMoveState : MonoBehaviour
             if(_VerticalMoveState != value)
             {
                 _VerticalMoveState = value;
-                EventTire.SendEvent(new ChangedVerticalMoveStateEvent() { NewState = value });
+                EventTire.SendEvent(TEPath.Up, TireEventType.ChangedVerticalMoveStateEvent, value);
             }
         }
     }
@@ -93,7 +93,7 @@ public class BaseMoveState : MonoBehaviour
             if(value != _ShiftWalk)
             {
                 _ShiftWalk = value;
-                EventTire.SendEvent(new ChangedShiftWalkEvent() { NewState = value });
+                EventTire.SendEvent(TEPath.Up, TireEventType.ChangedShiftWalkEvent, value);
             }
         }
     }
@@ -110,7 +110,7 @@ public class BaseMoveState : MonoBehaviour
             if (_Direction != value)
             {
                 _Direction = value;
-                EventTire.SendEvent(new ChangedDirectionEvent() { NewDirection = value });
+                EventTire.SendEvent(TEPath.Up, TireEventType.ChangedDirectionEvent, value);
             }                
         }
 
@@ -125,14 +125,14 @@ public class BaseMoveState : MonoBehaviour
             if(_SitDown != value)
             {
                 _SitDown = value;
-                EventTire.SendEvent(new ChangedSitDownEvent() { NewState = value });
+                EventTire.SendEvent(TEPath.Up, TireEventType.ChangedSitDownEvent, value);
             }
         }
     }
 
     void Start()
     {
-        EventTire = GetComponent<IEventTire>();
+        EventTire = this.GetEventTire();
     }
     
 }

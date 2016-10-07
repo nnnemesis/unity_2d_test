@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class AmmoPickupController : MonoBehaviour, ITireEventListener {
+public class AmmoPickupController : MonoBehaviour {
 
     private IEventTire EventTire;
     private WeaponaryState WeaponaryState;
@@ -16,41 +16,29 @@ public class AmmoPickupController : MonoBehaviour, ITireEventListener {
             if(_CanPickupWeapon != value)
             {
                 _CanPickupWeapon = value;
-                EventTire.SendEvent(new ChangedCanPickupAmmoEvent() { NewState = value });
+                EventTire.SendEvent(TEPath.Up, TireEventType.ChangedCanPickupAmmoEvent, value);
             }
         }
     }
 
-    public void OnTireEvent(TireEvent ev)
+    void OnControlEvent(object param)
     {
-        if(ev.Type == TireEventType.ControlEvent)
-        {
-            OnControlEvent((ControlEvent)ev);
-        }
-        else if (ev.Type == TireEventType.AmmoPickupEvent)
-        {
-            OnAmmoPickupEvent((AmmoPickupEvent)ev);
-        }
-    }
-
-    void OnControlEvent(ControlEvent e)
-    {
-        Dictionary<ControlAction, bool> actions = e.Actions;
+        Dictionary<ControlAction, bool> actions = (Dictionary<ControlAction, bool>)param;
         if (CanPickupWeapon && AmmoPickup != null && actions[ControlAction.Use])
         {
             var pickup = AmmoPickup.GetComponent<AmmoPickup>();
             if(pickup != null)
             {
-                EventTire.SendEvent(new AmmoPickupEvent() { AmmoPickup = pickup });
+                EventTire.SendEvent(TEPath.Up, TireEventType.AmmoPickupEvent, pickup);
                 Destroy(AmmoPickup);
                 AmmoPickup = null;
             }
         }
     }
 
-    void OnAmmoPickupEvent(AmmoPickupEvent ev)
+    void OnAmmoPickupEvent(object param)
     {
-        var ammoPickup = ev.AmmoPickup;
+        AmmoPickup ammoPickup = (AmmoPickup)param;
         var weaponType = ammoPickup.WeaponType;
         // if not current weapon
         if ((WeaponaryState.CurrentWeaponIndex < 0) 
@@ -69,10 +57,16 @@ public class AmmoPickupController : MonoBehaviour, ITireEventListener {
 
     void Start()
     {
-        EventTire = GetComponent<IEventTire>();
-        EventTire.AddEventListener(TireEventType.ControlEvent, this);
-        EventTire.AddEventListener(TireEventType.AmmoPickupEvent, this);
+        EventTire = this.GetEventTire();
+        EventTire.AddEventListener(TireEventType.ControlEvent, OnControlEvent);
+        EventTire.AddEventListener(TireEventType.AmmoPickupEvent, OnAmmoPickupEvent);
         WeaponaryState = GetComponent<WeaponaryState>();
+    }
+
+    void OnDestroy()
+    {
+        EventTire.RemoveEventListener(TireEventType.ControlEvent, OnControlEvent);
+        EventTire.RemoveEventListener(TireEventType.AmmoPickupEvent, OnAmmoPickupEvent);
     }
 
     void OnTriggerEnter2D(Collider2D other)

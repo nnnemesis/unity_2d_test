@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class WeaponPickupController : MonoBehaviour, ITireEventListener {
+public class WeaponPickupController : MonoBehaviour {
 
     private IEventTire EventTire;
     private GameObject WeaponPickup;
@@ -15,28 +15,20 @@ public class WeaponPickupController : MonoBehaviour, ITireEventListener {
             if(_CanPickupWeapon != value)
             {
                 _CanPickupWeapon = value;
-                EventTire.SendEvent(new ChangedCanPickupWeaponEvent() { NewState = value });
+                EventTire.SendEvent(TEPath.Up, TireEventType.ChangedCanPickupWeaponEvent, value);
             }
         }
     }
 
-    public void OnTireEvent(TireEvent ev)
+    void OnControlEvent(object param)
     {
-        if(ev.Type == TireEventType.ControlEvent)
-        {
-            OnControlEvent((ControlEvent)ev);
-        }
-    }
-
-    void OnControlEvent(ControlEvent e)
-    {
-        Dictionary<ControlAction, bool> actions = e.Actions;
+        Dictionary<ControlAction, bool> actions = (Dictionary<ControlAction, bool>)param;
         if (CanPickupWeapon && WeaponPickup != null && actions[ControlAction.Use])
         {
             var pickup = WeaponPickup.GetComponent<WeaponPickup>();
             if(pickup != null)
             {
-                EventTire.SendEvent(new WeaponPickupEvent() { WeaponPickup = pickup });
+                EventTire.SendEvent(TEPath.Up, TireEventType.WeaponPickupEvent, pickup);
                 Destroy(WeaponPickup);
                 WeaponPickup = null;
             }
@@ -45,13 +37,13 @@ public class WeaponPickupController : MonoBehaviour, ITireEventListener {
 
     void Start()
     {
-        EventTire = GetComponent<IEventTire>();
-        EventTire.AddEventListener(TireEventType.ControlEvent, this);
+        EventTire = this.GetEventTire();
+        EventTire.AddEventListener(TireEventType.ControlEvent, OnControlEvent);
     }
 
     void OnDestroy()
     {
-        EventTire.RemoveEventListener(TireEventType.ControlEvent, this);
+        EventTire.RemoveEventListener(TireEventType.ControlEvent, OnControlEvent);
     }
 
     void OnTriggerEnter2D(Collider2D other)
